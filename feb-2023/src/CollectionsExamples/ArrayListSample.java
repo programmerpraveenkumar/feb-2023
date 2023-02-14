@@ -13,6 +13,7 @@ public class ArrayListSample {
         ageList.add(10);//0
         ageList.add(45);//1
         ageList.add(89);//2
+        ageList.add(10);//3
         System.out.println(ageList.get(0));//get the value based on the index0
         System.out.println(ageList.get(1));
         ArrayList<String> nameList = new ArrayList<String>();

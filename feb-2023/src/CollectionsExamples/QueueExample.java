@@ -17,7 +17,5 @@ public class QueueExample {
         System.out.println(queueObj);
         System.out.println(queueObj.peek());//return the first item in the queue
         queueObj.remove("test2");
-
-
     }
 }
