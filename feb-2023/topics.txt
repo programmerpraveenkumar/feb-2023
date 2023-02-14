@@ -1,0 +1,21 @@
+Collections:
+    List->ArrayList,Vector,LinkedList
+            stores the value like array.
+    Stack(LIFO),Queue(FiFo)
+    Set->HashSet,LinkedHashSet,TreeSet
+            will not allow the duplicates
+    Map->HashMap,TreeMap,LinkedHashMap
+            should be key and value
+
+Rules:
+Collections will accept oly the object.
+So  cannot use primitive datatype.Need to use wrapper classes
+int - Integer
+long - Long
+float -Float
+double - Double
+boolean - Boolean
+char   - Char
+short - Short
+byte - Byte
+class object.

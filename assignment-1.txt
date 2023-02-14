@@ -1,0 +1,13 @@
+1.array iteration
+Create (class1,class2) 2java classes
+class1 has a method wch returns the array. 
+
+class2 has main method.
+		in the main method create the object for class1 ..
+		using the object call the method and iterate the array 
+
+2.Method OverLoading:
+
+	create class3
+	printMessage(float num,String messgae)->display the value
+	printMessage(int num,String messgae)->display the value

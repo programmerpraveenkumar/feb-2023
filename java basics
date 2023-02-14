@@ -1,0 +1,24 @@
+java basics
+    oops
+    collections
+    threads
+    mysql connetion
+    servlet
+    spring boot->rest api,mysql connection,mongodb(CRUD),fileupload,
+                MicroServices(Mysql connections)
+    Active MQ & KAFKA
+    
+    Angular:
+        HTML,css,JavaScript
+        Angular intro
+            create app,creating components,pipes,directives,integrating website,rest api integration
+            Start with project.
+                FUll stack with  spring boot MicroServices with  angluar
+
+
+Install:
+    java->Intellj or eclipse,mysql(server & workbench(editor)),postman(API  testing),JDK11
+    browser->chrome or edge,
+Angular (Front-end):
+    vscode
+GIT->push,pull
