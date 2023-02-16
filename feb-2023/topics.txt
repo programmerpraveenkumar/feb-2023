@@ -19,3 +19,20 @@ char   - Char
 short - Short
 byte - Byte
 class object.
+
+
+Pending:
+Comparable,comparator,
+treeset with Comparable
+stream,filter
+Generics
+
+Threads:
+MainThread->will be created during the execution.
+get the customer records from another server.
+Each Call it gives 1000 record.Total records are 10,000
+need to call the server N times till it reaches the last record.
+
+java create thread:
+extends Thread
+implements Runnable
