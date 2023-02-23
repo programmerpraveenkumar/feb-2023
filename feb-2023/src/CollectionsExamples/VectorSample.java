@@ -8,6 +8,7 @@ in the collections data type mentioned by below syntax
 diamond operataor <>
 List<Object> obj = new ArrayList<Object>();
 List<Object> obj = new ArrayList<Object>();
+can be used in thread.so it is slower than arraylist
  */
 public class VectorSample {
     public static void main(String[] args) {

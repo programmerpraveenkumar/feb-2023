@@ -6,6 +6,8 @@ in the collections data type mentioned by below syntax
 diamond operataor <>
 List<Object> obj = new ArrayList<Object>();
 List<Object> obj = new ArrayList<Object>();
+shift position after deletion of the elements
+Good for adding and searching the elements
  */
 public class ArrayListSample {
     public static void main(String[] args) {
@@ -16,6 +18,8 @@ public class ArrayListSample {
         ageList.add(10);//3
         System.out.println(ageList.get(0));//get the value based on the index0
         System.out.println(ageList.get(1));
+
+
         ArrayList<String> nameList = new ArrayList<String>();
         nameList.add("test");
         nameList.add("test1");

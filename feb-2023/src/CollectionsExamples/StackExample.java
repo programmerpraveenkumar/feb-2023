@@ -5,7 +5,7 @@ import java.util.Queue;
 import java.util.Stack;
 
 /*
-FIFO->first in first out
+LIFO->LAST in first out
  */
 public class StackExample {
     public static void main(String[] args) {

@@ -5,9 +5,11 @@ import java.util.LinkedList;
 
 /*
 in the collections data type mentioned by below syntax
+will not shift position after deletion of the elements
+Good for adding and deletion the elements
 diamond operataor <>
 List<Object> obj = new ArrayList<Object>();
-List<Object> obj = new ArrayList<Object>();
+List<Object> obj = new ArrayList<Object>();+
  */
 public class LinkedListSample {
     public static void main(String[] args) {

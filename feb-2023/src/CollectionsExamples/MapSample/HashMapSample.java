@@ -1,6 +1,9 @@
 package CollectionsExamples.MapSample;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /*
 hashmap ill store the value in key and value
 key should be unique.unless value will be overridden.
@@ -23,7 +26,14 @@ public class HashMapSample {
         System.out.println(obj);
 
         HashMap<Long,String> objMap = new HashMap<Long,String>();
-        objMap.put(12l,"adsf");
+        objMap.put(6l,"adsf");
         objMap.put(454l,"testsdf");
+
+        Map<Long,String> afterFilter = objMap.entrySet().stream().filter(mObj->mObj.getKey()==6l).collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+        System.out.println("after filter ");
+        System.out.println(afterFilter);
+        afterFilter.forEach((key,value)->{
+            System.out.println(key+" "+value);
+        });
     }
 }
