@@ -3,6 +3,8 @@ package com.feb2023.controller;
 
 import com.feb2023.Request.UserRequest;
 import com.feb2023.Response.GeneralResponse;
+import com.feb2023.service.SampleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +31,26 @@ delete
  */
 @RestController
 public class SimpleController {
+    @Autowired
+    SampleService sampleService;//create the object for service class.
+
 
     @GetMapping("name")//localhost:8080/name
     public String getName(){
         return "sample name";
     }
+//    @GetMapping("getUser")//localhost:8080/name
+//    public String getAge(@RequestParam String pageNo){
+//        return "Page no is "+pageNo;
+//    }
     @GetMapping("getUser")//localhost:8080/name
-    public String getAge(@RequestParam String pageNo){
-        return "Page no is "+pageNo;
+    public ResponseEntity<?> getUseList(){
+        try{
+            return ResponseEntity.ok(sampleService.getUser());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api"+e.getMessage()));
+        }
+
     }
     @PostMapping("otpValidate")
     public String storeUser(@RequestParam String otp){
@@ -51,17 +65,31 @@ public class SimpleController {
     public String pathVariableGET(@PathVariable String id){
         return "user id "+id;
     }
+    @PostMapping("register")
+    public ResponseEntity registerUser(@RequestBody  UserRequest userRequest) {
+//        SampleService service  = new SampleService();
+        GeneralResponse generalResponse = new GeneralResponse();
+        try{
+            sampleService.registerUser(userRequest);
+            generalResponse.setMessage("Login is ok");
+            return ResponseEntity.ok(generalResponse);
+        }catch (Exception e){
+            generalResponse.setMessage("Please provide the proper details.");
+            return ResponseEntity.badRequest().body(generalResponse);
+        }
+    }
     @PostMapping("login")
     public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest){
+//        SampleService service  = new SampleService();
+//        service.loginValidation(userRequest);
         GeneralResponse generalResponse = new GeneralResponse();
-        if(userRequest.getEmail().equals("admin@gmail.com") && userRequest.getPassword().equals("admin")){
+        try{
+            sampleService.loginValidation(userRequest);
             generalResponse.setMessage("Login is ok");
-            return ResponseEntity.ok(generalResponse);//success response
-           // return "login is ok ";
-        }else{
+            return ResponseEntity.ok(generalResponse);
+        }catch (Exception e){
             generalResponse.setMessage("Please provide the proper details.");
-            return ResponseEntity.badRequest().body(generalResponse);//failure reponse.
-         //  return "Please provide the proper details.";
+            return ResponseEntity.badRequest().body(generalResponse);
         }
         //return userRequest.getName()+" "+userRequest.getAddress()+" "+userRequest.getEmail();
     }
