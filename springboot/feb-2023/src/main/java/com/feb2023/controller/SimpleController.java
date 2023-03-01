@@ -3,10 +3,13 @@ package com.feb2023.controller;
 
 import com.feb2023.Request.UserRequest;
 import com.feb2023.Response.GeneralResponse;
+import com.feb2023.model.UserModel;
 import com.feb2023.service.SampleService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 /*
 @RestController->return the json response.it will not return html or webpages.
@@ -29,6 +32,13 @@ patch
 delete
     for delete the data.instead of this can use post also
  */
+
+/*
+C->create (insert)
+R->reading the data (select)
+U->update the data (update)
+D->delete the data(delete)
+ */
 @RestController
 public class SimpleController {
     @Autowired
@@ -46,11 +56,28 @@ public class SimpleController {
     @GetMapping("getUser")//localhost:8080/name
     public ResponseEntity<?> getUseList(){
         try{
-            return ResponseEntity.ok(sampleService.getUser());
+            List<UserModel> user = sampleService.getUser();
+            return ResponseEntity.ok(user);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse("Error in api"+e.getMessage()));
         }
 
+    }
+    @GetMapping("getUser/email")//localhost:8080/name
+    public ResponseEntity<?> getUseList(@RequestParam String email){
+        try{
+             UserModel user = sampleService.getUser(email);
+            return ResponseEntity.ok(user);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api"+e.getMessage()));
+        }
+
+    }
+
+    @GetMapping("testupdate")
+    public ResponseEntity<String> update(){
+        sampleService.updateNameByid("tetname",5);
+        return ResponseEntity.ok("udpate ");
     }
     @PostMapping("otpValidate")
     public String storeUser(@RequestParam String otp){
@@ -68,16 +95,50 @@ public class SimpleController {
     @PostMapping("register")
     public ResponseEntity registerUser(@RequestBody  UserRequest userRequest) {
 //        SampleService service  = new SampleService();
-        GeneralResponse generalResponse = new GeneralResponse();
         try{
-            sampleService.registerUser(userRequest);
-            generalResponse.setMessage("Login is ok");
-            return ResponseEntity.ok(generalResponse);
+            UserModel userModel = sampleService.registerUser(userRequest);
+            return ResponseEntity.ok(userModel);
         }catch (Exception e){
-            generalResponse.setMessage("Please provide the proper details.");
+            GeneralResponse generalResponse = new GeneralResponse();
+            generalResponse.setMessage("Error: "+e.getMessage());
             return ResponseEntity.badRequest().body(generalResponse);
         }
     }
+    @DeleteMapping("deleteUser/{type}")
+    public ResponseEntity deleteUserById(@RequestBody  UserRequest userRequest,@PathVariable String type){
+        GeneralResponse generalResponse = new GeneralResponse();
+        try{
+            sampleService.deleteUser(type,""+userRequest.getUserId());
+            generalResponse.setMessage("User is deleted");
+            return ResponseEntity.ok(generalResponse);
+        }catch (Exception e){
+            generalResponse.setMessage("Error while deleting. "+e.getMessage());
+            return ResponseEntity.badRequest().body(generalResponse);
+        }
+    }
+    @PutMapping("updateUserById")
+    public ResponseEntity updateUserById(@RequestBody  UserRequest userRequest){
+        GeneralResponse generalResponse = new GeneralResponse();
+        try{
+           UserModel userModel =  sampleService.updateUserByid(userRequest);
+            return ResponseEntity.ok(userModel);
+        }catch (Exception e){
+            generalResponse.setMessage("Error while deleting. "+e.getMessage());
+            return ResponseEntity.badRequest().body(generalResponse);
+        }
+    }
+    @PutMapping("updateUserByEmail")
+    public ResponseEntity updateUserByEmail(@RequestBody  UserRequest userRequest){
+        GeneralResponse generalResponse = new GeneralResponse();
+        try{
+            UserModel userModel =  sampleService.updateUserByEmail(userRequest);
+            return ResponseEntity.ok(userModel);
+        }catch (Exception e){
+            generalResponse.setMessage("Error while deleting. "+e.getMessage());
+            return ResponseEntity.badRequest().body(generalResponse);
+        }
+    }
+
     @PostMapping("login")
     public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest){
 //        SampleService service  = new SampleService();
