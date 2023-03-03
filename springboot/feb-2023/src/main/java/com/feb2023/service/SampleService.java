@@ -1,14 +1,24 @@
 package com.feb2023.service;
 
+import com.feb2023.Repository.CountryRepo;
 import com.feb2023.Repository.UserRepo;
 import com.feb2023.Request.UserRequest;
 
+import com.feb2023.model.AddressModel;
+import com.feb2023.model.CountryModel;
 import com.feb2023.model.UserModel;
 import com.feb2023.model.Userids;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,13 +27,18 @@ public class SampleService {
         @Autowired
         UserRepo userRepo;
 
+        @Autowired
+        CountryRepo countryRepo;
+
         public List<UserModel> getUser(){
             return userRepo.findAll();//get all the data.
         }
     public UserModel getUser(String email) throws  Exception{
+        System.out.println("get user in service");
             Userids userids = new Userids();
             userids.setEmail(email);
-         return userRepo.findById(userids).orElseThrow(()->new Exception("User not found"));
+        return userRepo.findByEmail(email).stream().findAny().orElseThrow(()->new Exception("User not found"));
+         //return userRepo.findById(userids).orElseThrow(()->new Exception("User not found"));
 
     }
 
@@ -46,20 +61,21 @@ public class SampleService {
 
             if(type.equals("email")){
                 userid.setEmail(value);
-               user = userRepo.findById(userid).orElseThrow(()->new Exception("User is not found"));
+            //   user = userRepo.findById(userid).orElseThrow(()->new Exception("User is not found"));
             }else if(type.equals("id")){
-                userid.setId(Integer.parseInt(value));
-                //user = userRepo.findById(Integer.parseInt(value)).orElseThrow(()->new Exception("User is not found"));
+                //userid.setId(Integer.parseInt(value));
+                user = userRepo.findById(Integer.parseInt(value)).orElseThrow(()->new Exception("User is not found"));
             }
-          user = userRepo.findById(userid).orElseThrow(()->new Exception("User is not found"));
+
+         // user = userRepo.findById(userid).orElseThrow(()->new Exception("User is not found"));
             userRepo.delete(user);
             return true;
       }
     public  UserModel registerUser(UserRequest userRequest)throws Exception{
             //email validation
-//        if(userRepo.findByEmail(userRequest.getEmail()).stream().count() > 0){
-//            throw new Exception("email is already exist");
-//        }
+        if(userRepo.findByEmail(userRequest.getEmail()).stream().count() > 0){
+            throw new Exception("email is already exist");
+        }
         if(!Objects.nonNull(userRequest.getEmail())){
             throw new Exception("Email should not be empty");
         }else if(!Objects.nonNull(userRequest.getName())){
@@ -67,33 +83,70 @@ public class SampleService {
         }else if(!Objects.nonNull(userRequest.getPassword())){
             throw new Exception("Password should not be empty");
         }else{
-            Userids userids = new Userids();
-            userids.setMobile(userRequest.getMobile());
-            userids.setEmail(userRequest.getEmail());
+            CountryModel countryModel = countryRepo.findById(userRequest.getCountryId()).orElseThrow(()->new Exception("Country is not found"));
+//            Userids userids = new Userids();
+//            userids.setMobile(userRequest.getMobile());
+//            userids.setEmail(userRequest.getEmail());
             //register in the database.
             UserModel userModel = new UserModel();
-            userModel.setAddress(userRequest.getAddress());
+            //userModel.setAddress(userRequest.getAddress());
             userModel.setName(userRequest.getName());
-            userModel.setUserids(userids);
+            //userModel.setUserids(userids);
+            //userModel.setEmail();
+            userModel.setEmail(userRequest.getEmail());
             userModel.setPassword(userRequest.getPassword());
-            //userModel.setMobile(userRequest.getMobile());
+            userModel.setMobile(userRequest.getMobile());
             userModel.setDob(userRequest.getDob());
+            userModel.setCountryModel(countryModel);
+            List<AddressModel> addressModels = this.getUserAddressList(userRequest.getAddress());
+
+//            AddressModel addressModel1 = new AddressModel();
+//            addressModel1.setType("temp");
+//            addressModel1.setAddress("sample address");
+//            userModel.setAddressModel(addressModels);
+//
+//            AddressModel addressModel2 = new AddressModel();
+//            addressModel2.setType("temp");
+//            addressModel2.setAddress("sample address");
+//            addressModels.add(addressModel1);
+//            addressModels.add(addressModel2);
+
+            userModel.setAddressModel(addressModels);
             userRepo.save(userModel);//insert the data in database.
             return userModel;
         }
     }
+
+    public UserModel login(String email,String password)throws  Exception{
+            UserModel userModel = userRepo.login(email,password).orElseThrow(()->new Exception("Email or Password  is wrong"));
+            String token = createToken(email);
+            userRepo.updateTokenById(token,userModel.getId());//update the token in the table for user
+            userModel.setToken(token);//assing the token in the user Model.
+            return userModel;
+    }
+    private List<AddressModel> getUserAddressList(List<AddressModel> list){
+        List<AddressModel> listAddress = new ArrayList<>();
+        list.forEach(address->{
+            AddressModel addressModel = new AddressModel();
+            addressModel.setType(address.getType());
+            addressModel.setAddress(address.getAddress());
+            listAddress.add(addressModel);
+        });
+        return listAddress;
+    }
     public  UserModel updateUserByEmail(UserRequest userRequest)throws Exception{
-        Userids userids = new Userids();
-        userids.setEmail(userRequest.getEmail());
-//        UserModel userModel = userRepo.findByEmail(userids).stream().findFirst().orElseThrow(()->new Exception("User is not found"));
-//        userModel = this.updateUser(userModel,userRequest);
-//        return  userModel;
-        return null;
+//        Userids userids = new Userids();
+//        userids.setEmail(userRequest.getEmail());
+        //return null;
+        UserModel userModel = userRepo.findByEmail(userRequest.getEmail()).stream().findFirst().orElseThrow(()->new Exception("User is not found"));
+        userModel = this.updateUser(userModel,userRequest);
+        return  userModel;
+
     }
     public UserModel updateUserByid(UserRequest userRequest)throws Exception{
             Userids userids = new Userids();
             userids.setId(userRequest.getUserId());
-        UserModel userModel = userRepo.findById(userids).orElseThrow(()->new Exception("User is not found"));
+        UserModel userModel = userRepo.findById(userRequest.getUserId()).orElseThrow(()->new Exception("User is not found"));
         userModel = this.updateUser(userModel,userRequest);
         return  userModel;
 
@@ -101,19 +154,48 @@ public class SampleService {
     private  UserModel updateUser(UserModel userModel,UserRequest userRequest)throws Exception{
 
         if(Objects.nonNull(userRequest.getEmail())){
-           // userModel.setEmail(userRequest.getEmail());
+            userModel.setEmail(userRequest.getEmail());
         } if(Objects.nonNull(userRequest.getName())){
             userModel.setName(userRequest.getName());
         } if(Objects.nonNull(userRequest.getPassword())){
             userModel.setPassword(userRequest.getPassword());
         } if(Objects.nonNull(userRequest.getMobile())){
-           // userModel.setMobile(userRequest.getMobile());
+            userModel.setMobile(userRequest.getMobile());
         } if(Objects.nonNull(userRequest.getAddress())){
-            userModel.setAddress(userRequest.getAddress());
+            //userModel.setAddress(userRequest.getAddress());
         } if(Objects.nonNull(userRequest.getDob() )){
             userModel.setDob(userRequest.getDob());
         }
         userRepo.save(userModel);//update the data in database.
         return userModel;
+    }
+
+    private String createToken(String email){
+     //long JWT_TOKEN_VALIDITY = 24 * 60 * 60;//24hours
+        long JWT_TOKEN_VALIDITY = 2;//2secs
+        String token =  Jwts.builder().setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .signWith(SignatureAlgorithm.HS512, "secret").compact();
+       return token;
+    }
+    private void tokenDecode(String token)throws Exception{
+        try {
+            Jwts.parser()
+                    .setSigningKey("secret")
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException | ClassCastException e) {
+           throw new Exception(e.getMessage());
+        }
+    }
+
+    public boolean validateTokenAgainstTheUser(String token,String userId)throws Exception{
+            this.tokenDecode(token);
+            UserModel userModel = userRepo.findById(Integer.parseInt(userId)).orElseThrow(()->new Exception("User is not found"));
+            if(userModel.getToken() == null || !userModel.getToken().equals(token)){
+                throw new Exception("Token mismatch");
+            }
+            return true;
     }
 }

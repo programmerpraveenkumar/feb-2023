@@ -7,6 +7,7 @@ import com.feb2023.model.UserModel;
 import com.feb2023.service.SampleService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -44,6 +45,20 @@ public class SimpleController {
     @Autowired
     SampleService sampleService;//create the object for service class.
 
+    @Autowired
+    Environment environment;
+    @GetMapping("countryname")
+    public String getFromApplicationProps(){
+        String value = environment.getProperty("COUNTRY_NAME");
+        if(value.equals("uk")){
+            return "united kingdom";
+        }
+        if(value.equals("uae")){
+            return "dubai";
+        }
+        return  environment.getProperty("COUNTRY_NAME");
+    }
+
 
     @GetMapping("name")//localhost:8080/name
     public String getName(){
@@ -54,12 +69,12 @@ public class SimpleController {
 //        return "Page no is "+pageNo;
 //    }
     @GetMapping("getUser")//localhost:8080/name
-    public ResponseEntity<?> getUseList(){
+    public ResponseEntity<?> getUseLists(){
         try{
             List<UserModel> user = sampleService.getUser();
             return ResponseEntity.ok(user);
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api"+e.getMessage()));
+            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api "+e.getMessage()));
         }
 
     }
@@ -141,15 +156,13 @@ public class SimpleController {
 
     @PostMapping("login")
     public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest){
-//        SampleService service  = new SampleService();
-//        service.loginValidation(userRequest);
-        GeneralResponse generalResponse = new GeneralResponse();
+
         try{
-            sampleService.loginValidation(userRequest);
-            generalResponse.setMessage("Login is ok");
-            return ResponseEntity.ok(generalResponse);
+           UserModel userModel =  sampleService.login(userRequest.getEmail(),userRequest.getPassword());
+            return ResponseEntity.ok(userModel);
         }catch (Exception e){
-            generalResponse.setMessage("Please provide the proper details.");
+            GeneralResponse generalResponse = new GeneralResponse();
+            generalResponse.setMessage("Error while login. "+e.getMessage());
             return ResponseEntity.badRequest().body(generalResponse);
         }
         //return userRequest.getName()+" "+userRequest.getAddress()+" "+userRequest.getEmail();
