@@ -1,9 +1,12 @@
 package com.feb2023.Configuration;
 
+import com.feb2023.Response.GeneralResponse;
 import com.feb2023.service.SampleService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,8 +34,9 @@ public class TokenInterceptor implements HandlerInterceptor {
          List<String> urlEndpoints = Arrays.asList("login","register");
          return urlEndpoints.contains(url);
     }
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws CustomException {
         System.out.println("pre handle");
         String url = request.getRequestURI();
         if(isExcludeUrls(url)){
@@ -44,7 +48,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             sampleService.validateTokenAgainstTheUser(token,user_id);//throw exception.
             return true;
         }else{
-           throw new Exception("token or userid is empty");
+           throw new CustomException("token or userid is empty");
         }
     }
 

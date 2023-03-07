@@ -1,5 +1,6 @@
 package com.feb2023.service;
 
+import com.feb2023.Configuration.CustomException;
 import com.feb2023.Repository.CountryRepo;
 import com.feb2023.Repository.UserRepo;
 import com.feb2023.Request.UserRequest;
@@ -15,6 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,14 +32,17 @@ public class SampleService {
         @Autowired
         CountryRepo countryRepo;
 
+        @Autowired
+        Environment environment;
+
         public List<UserModel> getUser(){
             return userRepo.findAll();//get all the data.
         }
-    public UserModel getUser(String email) throws  Exception{
+    public UserModel getUser(String email) throws  CustomException{
         System.out.println("get user in service");
             Userids userids = new Userids();
             userids.setEmail(email);
-        return userRepo.findByEmail(email).stream().findAny().orElseThrow(()->new Exception("User not found"));
+        return userRepo.findByEmail(email).stream().findAny().orElseThrow(()->new CustomException("User not found"));
          //return userRepo.findById(userids).orElseThrow(()->new Exception("User not found"));
 
     }
@@ -55,7 +60,7 @@ public class SampleService {
                throw new Exception("Error in userRequest");
             }
       }
-      public boolean deleteUser(String type,String value)throws Exception{
+      public boolean deleteUser(String type,String value)throws CustomException{
             UserModel user = null;
             Userids userid  = new Userids();
 
@@ -64,26 +69,27 @@ public class SampleService {
             //   user = userRepo.findById(userid).orElseThrow(()->new Exception("User is not found"));
             }else if(type.equals("id")){
                 //userid.setId(Integer.parseInt(value));
-                user = userRepo.findById(Integer.parseInt(value)).orElseThrow(()->new Exception("User is not found"));
+                user   = getUserById(value);
+                        //userRepo.findById(Integer.parseInt(value)).orElseThrow(()->new Exception("User is not found"));
             }
 
          // user = userRepo.findById(userid).orElseThrow(()->new Exception("User is not found"));
             userRepo.delete(user);
             return true;
       }
-    public  UserModel registerUser(UserRequest userRequest)throws Exception{
+    public  UserModel registerUser(UserRequest userRequest)throws CustomException{
             //email validation
         if(userRepo.findByEmail(userRequest.getEmail()).stream().count() > 0){
-            throw new Exception("email is already exist");
+            throw new CustomException("email is already exist");
         }
         if(!Objects.nonNull(userRequest.getEmail())){
-            throw new Exception("Email should not be empty");
+            throw new CustomException("Email should not be empty");
         }else if(!Objects.nonNull(userRequest.getName())){
-            throw new Exception("Name should not be empty");
+            throw new CustomException("Name should not be empty");
         }else if(!Objects.nonNull(userRequest.getPassword())){
-            throw new Exception("Password should not be empty");
+            throw new CustomException("Password should not be empty");
         }else{
-            CountryModel countryModel = countryRepo.findById(userRequest.getCountryId()).orElseThrow(()->new Exception("Country is not found"));
+            CountryModel countryModel = countryRepo.findById(userRequest.getCountryId()).orElseThrow(()->new CustomException("Country is not found"));
 //            Userids userids = new Userids();
 //            userids.setMobile(userRequest.getMobile());
 //            userids.setEmail(userRequest.getEmail());
@@ -117,8 +123,8 @@ public class SampleService {
         }
     }
 
-    public UserModel login(String email,String password)throws  Exception{
-            UserModel userModel = userRepo.login(email,password).orElseThrow(()->new Exception("Email or Password  is wrong"));
+    public UserModel login(String email,String password)throws  CustomException{
+            UserModel userModel = userRepo.login(email,password).orElseThrow(()->new CustomException("Email or Password  is wrong"));
             String token = createToken(email);
             userRepo.updateTokenById(token,userModel.getId());//update the token in the table for user
             userModel.setToken(token);//assing the token in the user Model.
@@ -134,24 +140,24 @@ public class SampleService {
         });
         return listAddress;
     }
-    public  UserModel updateUserByEmail(UserRequest userRequest)throws Exception{
+    public  UserModel updateUserByEmail(UserRequest userRequest)throws CustomException{
 //        Userids userids = new Userids();
 //        userids.setEmail(userRequest.getEmail());
         //return null;
-        UserModel userModel = userRepo.findByEmail(userRequest.getEmail()).stream().findFirst().orElseThrow(()->new Exception("User is not found"));
+        UserModel userModel = userRepo.findByEmail(userRequest.getEmail()).stream().findFirst().orElseThrow(()->new CustomException("User is not found"));
         userModel = this.updateUser(userModel,userRequest);
         return  userModel;
 
     }
-    public UserModel updateUserByid(UserRequest userRequest)throws Exception{
+    public UserModel updateUserByid(UserRequest userRequest)throws CustomException {
             Userids userids = new Userids();
             userids.setId(userRequest.getUserId());
-        UserModel userModel = userRepo.findById(userRequest.getUserId()).orElseThrow(()->new Exception("User is not found"));
+        UserModel userModel = getUserById(userRequest.getUserId());
         userModel = this.updateUser(userModel,userRequest);
         return  userModel;
 
     }
-    private  UserModel updateUser(UserModel userModel,UserRequest userRequest)throws Exception{
+    private  UserModel updateUser(UserModel userModel,UserRequest userRequest)throws CustomException{
 
         if(Objects.nonNull(userRequest.getEmail())){
             userModel.setEmail(userRequest.getEmail());
@@ -171,30 +177,47 @@ public class SampleService {
     }
 
     private String createToken(String email){
-     //long JWT_TOKEN_VALIDITY = 24 * 60 * 60;//24hours
-        long JWT_TOKEN_VALIDITY = 2;//2secs
+     long JWT_TOKEN_VALIDITY = 24 * 60 * 60;//24hours
+     //   long JWT_TOKEN_VALIDITY = 2;//2secs
         String token =  Jwts.builder().setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, "secret").compact();
+                .signWith(SignatureAlgorithm.HS512, environment.getProperty("JWT_SECRET")).compact();
        return token;
     }
-    private void tokenDecode(String token)throws Exception{
+    private void tokenDecode(String token)throws CustomException{
         try {
             Jwts.parser()
-                    .setSigningKey("secret")
+                    .setSigningKey(environment.getProperty("JWT_SECRET"))
                     .parseClaimsJws(token)
                     .getBody();
         } catch (JwtException | ClassCastException e) {
-           throw new Exception(e.getMessage());
+           throw new CustomException(e.getMessage());
         }
     }
+    public List<UserModel> getUserList(){
+          return userRepo.findAll();
+    }
+    public List<UserModel> userListNotLoggedIn(){
+        return userRepo.userNotLoggedIn();
+    }
 
-    public boolean validateTokenAgainstTheUser(String token,String userId)throws Exception{
+    public void logout(String userId)throws Exception{
+        UserModel userModel = getUserById(userId);//check user is exist.
+        userRepo.updateTokenById("",userModel.getId());
+
+    }
+    private UserModel getUserById(String userId)throws CustomException{
+        return getUserById(Integer.parseInt(userId));
+    }
+    private UserModel getUserById(Integer userId)throws CustomException{
+        return   userRepo.findById(userId).orElseThrow(()->new CustomException("User is not found"));
+    }
+    public boolean validateTokenAgainstTheUser(String token,String userId)throws CustomException{
             this.tokenDecode(token);
-            UserModel userModel = userRepo.findById(Integer.parseInt(userId)).orElseThrow(()->new Exception("User is not found"));
+            UserModel userModel = getUserById(userId);
             if(userModel.getToken() == null || !userModel.getToken().equals(token)){
-                throw new Exception("Token mismatch");
+                throw new CustomException("Token mismatch");
             }
             return true;
     }

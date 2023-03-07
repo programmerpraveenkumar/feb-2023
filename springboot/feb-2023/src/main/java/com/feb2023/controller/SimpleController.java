@@ -1,6 +1,7 @@
 package com.feb2023.controller;
 
 
+import com.feb2023.Request.EmailContent;
 import com.feb2023.Request.UserRequest;
 import com.feb2023.Response.GeneralResponse;
 import com.feb2023.model.UserModel;
@@ -9,8 +10,17 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
+import java.util.Properties;
 
 /*
 @RestController->return the json response.it will not return html or webpages.
@@ -47,6 +57,8 @@ public class SimpleController {
 
     @Autowired
     Environment environment;
+//    @Autowired
+//    private JavaMailSender emailSender;
     @GetMapping("countryname")
     public String getFromApplicationProps(){
         String value = environment.getProperty("COUNTRY_NAME");
@@ -108,63 +120,84 @@ public class SimpleController {
         return "user id "+id;
     }
     @PostMapping("register")
-    public ResponseEntity registerUser(@RequestBody  UserRequest userRequest) {
-//        SampleService service  = new SampleService();
-        try{
+    public ResponseEntity registerUser(@RequestBody  UserRequest userRequest)throws Exception {
             UserModel userModel = sampleService.registerUser(userRequest);
             return ResponseEntity.ok(userModel);
-        }catch (Exception e){
-            GeneralResponse generalResponse = new GeneralResponse();
-            generalResponse.setMessage("Error: "+e.getMessage());
-            return ResponseEntity.badRequest().body(generalResponse);
-        }
+
     }
     @DeleteMapping("deleteUser/{type}")
-    public ResponseEntity deleteUserById(@RequestBody  UserRequest userRequest,@PathVariable String type){
-        GeneralResponse generalResponse = new GeneralResponse();
-        try{
+    public ResponseEntity deleteUserById(@RequestBody  UserRequest userRequest,@PathVariable String type,@RequestHeader String user_id)throws Exception{
+            GeneralResponse generalResponse = new GeneralResponse();
+            //check the header userid with request userid
+            if(!user_id.equals(userRequest.getUserId())){
+                throw new Exception("Don't have permission to update the user details");
+            }
             sampleService.deleteUser(type,""+userRequest.getUserId());
             generalResponse.setMessage("User is deleted");
             return ResponseEntity.ok(generalResponse);
-        }catch (Exception e){
-            generalResponse.setMessage("Error while deleting. "+e.getMessage());
-            return ResponseEntity.badRequest().body(generalResponse);
-        }
+
     }
     @PutMapping("updateUserById")
-    public ResponseEntity updateUserById(@RequestBody  UserRequest userRequest){
-        GeneralResponse generalResponse = new GeneralResponse();
-        try{
+    public ResponseEntity updateUserById(@RequestBody  UserRequest userRequest,@RequestHeader String user_id)throws Exception{
+            if(!user_id.equals(userRequest.getUserId())){
+                throw new Exception("Don't have permission to update the user details");
+            }
            UserModel userModel =  sampleService.updateUserByid(userRequest);
             return ResponseEntity.ok(userModel);
-        }catch (Exception e){
-            generalResponse.setMessage("Error while deleting. "+e.getMessage());
-            return ResponseEntity.badRequest().body(generalResponse);
-        }
+
     }
     @PutMapping("updateUserByEmail")
-    public ResponseEntity updateUserByEmail(@RequestBody  UserRequest userRequest){
-        GeneralResponse generalResponse = new GeneralResponse();
-        try{
+    public ResponseEntity updateUserByEmail(@RequestBody  UserRequest userRequest)throws Exception{
+
             UserModel userModel =  sampleService.updateUserByEmail(userRequest);
             return ResponseEntity.ok(userModel);
-        }catch (Exception e){
-            generalResponse.setMessage("Error while deleting. "+e.getMessage());
-            return ResponseEntity.badRequest().body(generalResponse);
-        }
+
     }
 
     @PostMapping("login")
-    public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest){
+    public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest)throws Exception{
 
-        try{
            UserModel userModel =  sampleService.login(userRequest.getEmail(),userRequest.getPassword());
             return ResponseEntity.ok(userModel);
-        }catch (Exception e){
-            GeneralResponse generalResponse = new GeneralResponse();
-            generalResponse.setMessage("Error while login. "+e.getMessage());
-            return ResponseEntity.badRequest().body(generalResponse);
-        }
+
         //return userRequest.getName()+" "+userRequest.getAddress()+" "+userRequest.getEmail();
+    }
+    @PostMapping("logout")
+    public ResponseEntity logout(@RequestHeader String user_id)throws Exception{
+            GeneralResponse generalResponse = new GeneralResponse();
+            sampleService.logout(user_id);
+            generalResponse.setMessage("logout successful");
+            return ResponseEntity.ok(generalResponse);
+    }
+    @PostMapping("sendEmail")
+    public ResponseEntity sendEmail(@RequestBody EmailContent request)throws Exception{
+//            SimpleMailMessage message = new SimpleMailMessage();
+//            message.setFrom("noreply@baeldung.com");
+//            message.setTo("sample@gmail.com");
+//            message.setSubject("sample subject");
+//            message.setText("sample text");
+//            emailSender.send(message);
+
+        String from = "contact@gmail.com";
+        String host = "localhost";//or IP address
+
+        //Get the session object
+        Properties properties = System.getProperties();
+        properties.setProperty("mail.smtp.host", host);
+        Session session = Session.getDefaultInstance(properties);
+        //compose the message
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO,new InternetAddress(request.getTo()));
+            message.setSubject(request.getSubject());
+            message.setText(request.getMessage());
+            // Send message
+            Transport.send(message);
+
+
+
+        GeneralResponse generalResponse = new GeneralResponse();
+            generalResponse.setMessage("Email sent");
+            return ResponseEntity.ok(generalResponse);
     }
 }

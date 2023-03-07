@@ -16,6 +16,8 @@ import java.util.Optional;
 public interface UserRepo extends JpaRepository<UserModel, Integer>{
     @Query("select user from UserModel user where email = ?1")
     List<UserModel> findByEmail(String email);
+    @Query("select user from UserModel user where token is null")
+    List<UserModel> userNotLoggedIn();
     @Query("select user from UserModel user where email = ?1 and password = ?2")
     Optional<UserModel> login(String email, String password);
     @Transactional
