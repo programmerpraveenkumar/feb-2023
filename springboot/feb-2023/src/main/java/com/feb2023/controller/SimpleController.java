@@ -1,24 +1,30 @@
 package com.feb2023.controller;
 
 
+import com.feb2023.Configuration.TokenInterceptor;
 import com.feb2023.Request.EmailContent;
 import com.feb2023.Request.UserRequest;
 import com.feb2023.Response.GeneralResponse;
+import com.feb2023.Response.UserServerResponse;
 import com.feb2023.model.UserModel;
 import com.feb2023.service.SampleService;
 import org.apache.catalina.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -57,7 +63,12 @@ public class SimpleController {
 
     @Autowired
     Environment environment;
-//    @Autowired
+
+    @Autowired
+    RestTemplate restTemplate;
+    Logger logger = LoggerFactory.getLogger(SimpleController.class);
+
+    //    @Autowired
 //    private JavaMailSender emailSender;
     @GetMapping("countryname")
     public String getFromApplicationProps(){
@@ -139,7 +150,7 @@ public class SimpleController {
     }
     @PutMapping("updateUserById")
     public ResponseEntity updateUserById(@RequestBody  UserRequest userRequest,@RequestHeader String user_id)throws Exception{
-            if(!user_id.equals(userRequest.getUserId())){
+            if(!user_id.equals(""+userRequest.getUserId())){
                 throw new Exception("Don't have permission to update the user details");
             }
            UserModel userModel =  sampleService.updateUserByid(userRequest);
@@ -171,33 +182,25 @@ public class SimpleController {
     }
     @PostMapping("sendEmail")
     public ResponseEntity sendEmail(@RequestBody EmailContent request)throws Exception{
-//            SimpleMailMessage message = new SimpleMailMessage();
-//            message.setFrom("noreply@baeldung.com");
-//            message.setTo("sample@gmail.com");
-//            message.setSubject("sample subject");
-//            message.setText("sample text");
-//            emailSender.send(message);
-
-        String from = "contact@gmail.com";
-        String host = "localhost";//or IP address
-
-        //Get the session object
-        Properties properties = System.getProperties();
-        properties.setProperty("mail.smtp.host", host);
-        Session session = Session.getDefaultInstance(properties);
-        //compose the message
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.addRecipient(Message.RecipientType.TO,new InternetAddress(request.getTo()));
-            message.setSubject(request.getSubject());
-            message.setText(request.getMessage());
-            // Send message
-            Transport.send(message);
 
 
 
         GeneralResponse generalResponse = new GeneralResponse();
-            generalResponse.setMessage("Email sent");
-            return ResponseEntity.ok(generalResponse);
+        generalResponse.setMessage("Email sent");
+        return ResponseEntity.ok(generalResponse);
+    }
+
+    @GetMapping("getUserListFromAnotherServer")
+    public ResponseEntity getUserListFromAnotherServer()throws Exception{
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("user-agent", "Chrome/54.0.2840.9");
+//        headers.add("token", "token value");
+//        headers.add("user_id", "user_id value");
+        //headers.setAccept();
+        HttpEntity <String> entity = new HttpEntity<String>(headers);
+        UserServerResponse response = restTemplate.exchange("https://reqres.in/api/users?page=2", HttpMethod.GET,entity, UserServerResponse.class).getBody();
+        logger.info(response.getData().toString());
+        return ResponseEntity.ok(response);
     }
 }
