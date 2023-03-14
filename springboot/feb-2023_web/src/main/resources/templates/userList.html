@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>userList</title>
+</head>
+<body>
+<h1>UserList</h1>
+
+<h1 th:if="${userList.size()} < 1">No User Found</h1>
+<div th:each="user: ${userList}">
+    <span th:text="${user.first_name}" />
+    <span th:text="${user.last_name}" />
+    <img th:src="${user.avatar}"/>
+</div>
+</body>
+</html>

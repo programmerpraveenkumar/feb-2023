@@ -1,5 +1,6 @@
 package com.feb2023.service;
 
+import com.feb2023.Configuration.ActiveMqConfig;
 import com.feb2023.Configuration.CustomException;
 import com.feb2023.Repository.CountryRepo;
 import com.feb2023.Repository.UserRepo;
@@ -20,8 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -36,9 +41,11 @@ public class SampleService {
 
         @Autowired
         CountryRepo countryRepo;
-
+    @Autowired
+    JmsTemplate jmsTemplate;
         @Autowired
         Environment environment;
+
     Logger logger = LoggerFactory.getLogger(SampleService.class);
 
         public List<UserModel> getUser(){
@@ -134,8 +141,11 @@ public class SampleService {
                // UserModel user = getUser(email);
                 UserModel userModel = userRepo.login(email,password).orElseThrow(()->new CustomException("Email or Password  is wrong"));
                 String token = createToken(email);
+                logger.info("token is generated for login");
+
                 userRepo.updateTokenById(token,userModel.getId());//update the token in the table for user
                 userModel.setToken(token);//assing the token in the user Model.
+                logger.info("inside login validation {} ",userModel.getId());
                 return userModel;
             }catch (Exception e){
                 this.sendEmailNotifationWhileLoginFailure(email);
@@ -266,5 +276,16 @@ public class SampleService {
             throw new CustomException(e.getMessage());
         }
 
+    }
+    public void publishMessage(String message)throws Exception{
+
+        jmsTemplate.convertAndSend("mar2023",message);
+//            jmsTemplate.send("mar2023", new MessageCreator() {
+//            public javax.jms.Message createMessage(javax.jms.Session session) throws JMSException {
+//                TextMessage txtMsg = session.createTextMessage();
+//                txtMsg.setText(message);
+//                return txtMsg;
+//            }
+//        });
     }
 }

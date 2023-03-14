@@ -8,19 +8,25 @@ import com.feb2023.Response.GeneralResponse;
 import com.feb2023.Response.UserServerResponse;
 import com.feb2023.model.UserModel;
 import com.feb2023.service.SampleService;
+import org.apache.activemq.Message;
+import org.apache.activemq.command.ActiveMQTextMessage;
 import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.mail.Message;
-import javax.mail.Session;
+import javax.jms.JMSException;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -167,7 +173,7 @@ public class SimpleController {
 
     @PostMapping("login")
     public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest)throws Exception{
-
+            logger.info("inside login validation");
            UserModel userModel =  sampleService.login(userRequest.getEmail(),userRequest.getPassword());
             return ResponseEntity.ok(userModel);
 
@@ -202,5 +208,27 @@ public class SimpleController {
         UserServerResponse response = restTemplate.exchange("https://reqres.in/api/users?page=2", HttpMethod.GET,entity, UserServerResponse.class).getBody();
         logger.info(response.getData().toString());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("testactivemq")
+    public ResponseEntity<?> sendMessage(@RequestParam String message) throws Exception{
+
+
+        sampleService.publishMessage(message);
+        GeneralResponse generalResponse = new GeneralResponse();
+        generalResponse.setMessage("message sent");
+        return ResponseEntity.ok(generalResponse);
+    }
+    @JmsListener(destination = "mar2023")
+    public void onMessage(Message message) {
+        try{
+            ActiveMQTextMessage objectMessage = (ActiveMQTextMessage) message;
+            //    log.info("Received Message: "+ message.getBody(String.class));
+            logger.info("Received Message: "+ objectMessage.getText());
+
+            //call the userservice
+        } catch(Exception e) {
+            logger.error("Received Exception : "+ e);
+        }
     }
 }

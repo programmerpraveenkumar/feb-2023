@@ -267,4 +267,9 @@ public class SampleService {
         }
 
     }
+
+    public void processMessage(String message){
+        logger.info("inside service process message {} ",message);
+        //database calls.
+    }
 }
