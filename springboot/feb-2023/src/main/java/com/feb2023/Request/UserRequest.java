@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 public class UserRequest {
     Integer userId;
+    String userIdStr;
     String name;
     String email;
     String mobile;

@@ -5,13 +5,14 @@ import lombok.Setter;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
 @Table(name="address")
-public class AddressModel {
+public class AddressModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;

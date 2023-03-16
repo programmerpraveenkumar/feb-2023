@@ -2,6 +2,7 @@ package com.feb2023;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -12,6 +13,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableCaching
 public class Feb2023Application {
 
 	public static void main(String[] args) {

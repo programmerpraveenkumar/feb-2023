@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
-public class UserModel  {
+public class UserModel implements Serializable  {
     @Id//Model should have one id.
     @GeneratedValue(strategy =GenerationType.IDENTITY)//
     Integer id;
@@ -34,9 +34,10 @@ public class UserModel  {
     @JoinColumn(name = "country",referencedColumnName = "id")
     CountryModel countryModel;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    List<AddressModel> addressModel;
+    //TODO cache will not work..reslove this.
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id",referencedColumnName = "id")
+//    List<AddressModel> addressModel;
 
     String token;
 }

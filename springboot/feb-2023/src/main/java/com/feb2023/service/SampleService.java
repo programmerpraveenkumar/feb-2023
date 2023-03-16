@@ -3,12 +3,15 @@ package com.feb2023.service;
 import com.feb2023.Configuration.ActiveMqConfig;
 import com.feb2023.Configuration.CustomException;
 import com.feb2023.Repository.CountryRepo;
+import com.feb2023.Repository.MongoRepo.TokenRepo;
+import com.feb2023.Repository.MongoRepo.UserRepoMongo;
 import com.feb2023.Repository.UserRepo;
 import com.feb2023.Request.UserRequest;
 
 import com.feb2023.controller.SimpleController;
 import com.feb2023.model.AddressModel;
 import com.feb2023.model.CountryModel;
+import com.feb2023.model.MongoModels.TokenModel;
 import com.feb2023.model.UserModel;
 import com.feb2023.model.Userids;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
@@ -17,9 +20,11 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.catalina.User;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -32,6 +37,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -41,6 +47,11 @@ public class SampleService {
 
         @Autowired
         CountryRepo countryRepo;
+        @Autowired
+        UserRepoMongo userRepoMongo;
+        @Autowired
+        TokenRepo tokenRepo;
+
     @Autowired
     JmsTemplate jmsTemplate;
         @Autowired
@@ -51,13 +62,18 @@ public class SampleService {
         public List<UserModel> getUser(){
             return userRepo.findAll();//get all the data.
         }
-    public UserModel getUser(String email) throws  CustomException{
+        @Cacheable(value = "userCache",key = "#email")
+        public UserModel getUser(String email) throws  CustomException{
         logger.info("get user in service");
             Userids userids = new Userids();
             userids.setEmail(email);
         return userRepo.findByEmail(email).stream().findAny().orElseThrow(()->new CustomException("User not found"));
          //return userRepo.findById(userids).orElseThrow(()->new Exception("User not found"));
 
+    }
+
+    public List<com.feb2023.model.MongoModels.UserModel> printUserListFromMongo(){
+        return userRepoMongo.findAll();//get all the data from the mongoddb user's collection.
     }
 
        public void updateNameByid(String name,Integer id){
@@ -130,7 +146,7 @@ public class SampleService {
 //            addressModels.add(addressModel1);
 //            addressModels.add(addressModel2);
 
-            userModel.setAddressModel(addressModels);
+            //userModel.setAddressModel(addressModels);
             userRepo.save(userModel);//insert the data in database.
             return userModel;
         }
@@ -142,8 +158,8 @@ public class SampleService {
                 UserModel userModel = userRepo.login(email,password).orElseThrow(()->new CustomException("Email or Password  is wrong"));
                 String token = createToken(email);
                 logger.info("token is generated for login");
-
-                userRepo.updateTokenById(token,userModel.getId());//update the token in the table for user
+                tokenUpdateForUser(userModel.getId(),token);//update token for mysql and mongo
+              //  userRepo.updateTokenById();//update the token in the table for user
                 userModel.setToken(token);//assing the token in the user Model.
                 logger.info("inside login validation {} ",userModel.getId());
                 return userModel;
@@ -151,6 +167,22 @@ public class SampleService {
                 this.sendEmailNotifationWhileLoginFailure(email);
                 throw new CustomException(e.getMessage());//response to UI.
             }
+    }
+    private void tokenUpdateForUser(Integer userId,String token){
+        userRepo.updateTokenById(token,userId);//update the token in the mysql table for user
+        Optional<TokenModel> tokenModelOpt = tokenRepo.findByUserid(userId);//mongodb
+        TokenModel tokenModel = new TokenModel();
+        logger.info("update in mongodb");
+        //existing user
+        if(tokenModelOpt.isPresent()){
+            logger.info("update in mongodb");
+            tokenModel = tokenModelOpt.get();
+        }else{
+            tokenModel.setUserid(userId);
+        }
+        tokenModel.setToken(token);
+        tokenRepo.save(tokenModel);
+        logger.info("token update complete for {} ",userId);
     }
     private void sendEmailNotifationWhileLoginFailure(String email){
             try{
@@ -235,9 +267,10 @@ public class SampleService {
         return userRepo.userNotLoggedIn();
     }
 
-    public void logout(String userId)throws Exception{
-        UserModel userModel = getUserById(userId);//check user is exist.
-        userRepo.updateTokenById("",userModel.getId());
+    public void logout(Integer userId)throws Exception{
+
+        tokenUpdateForUser(userId,"");
+        //userRepo.updateTokenById("",userModel.getId());
 
     }
     private UserModel getUserById(String userId)throws CustomException{
@@ -246,13 +279,36 @@ public class SampleService {
     private UserModel getUserById(Integer userId)throws CustomException{
         return   userRepo.findById(userId).orElseThrow(()->new CustomException("User is not found"));
     }
+
     public boolean validateTokenAgainstTheUser(String token,String userId)throws CustomException{
             this.tokenDecode(token);
-            UserModel userModel = getUserById(userId);
-            if(userModel.getToken() == null || !userModel.getToken().equals(token)){
-                throw new CustomException("Token mismatch");
+            //mongod token validation.
+            Optional<TokenModel> userOpt = tokenRepo.findByUserid(Integer.parseInt(userId));
+            if(userOpt.isPresent()){
+                logger.info("user is  exist in mongodb ");
+                if(userOpt.get().getToken().equals(token)){
+                    logger.info("token match in mongodb");
+                    return true;
+                }else{
+                    logger.info("token not match in mongodb..so goes to Mysql {} ",userId);
+                    return mysqlUserTokenVerifcation(token,userId);
+                }
+            }else {
+                logger.info("user is not exist in mongodb so goes to Mysql");
+                return mysqlUserTokenVerifcation(token,userId);
+
             }
+            //return false;
+    }
+    private boolean mysqlUserTokenVerifcation(String token,String userId)throws CustomException{
+        UserModel userModel = getUserById(userId);
+        if (userModel.getToken() == null || !userModel.getToken().equals(token)) {
+            logger.error("Token mismatch in mysql ");
+            throw new CustomException("Token mismatch");
+        } else {
+            logger.info("token  match   Mysql {} ",userId);
             return true;
+        }
     }
     public boolean sendEmail(String toAddress,String subject,String bodyContent)throws CustomException{
         try{
@@ -287,5 +343,35 @@ public class SampleService {
 //                return txtMsg;
 //            }
 //        });
+    }
+
+    public void insertUserInMongo(UserRequest userRequest)throws Exception{
+        com.feb2023.model.MongoModels.UserModel userModel =new com.feb2023.model.MongoModels.UserModel();
+        userModel.setDob(userRequest.getDob().toString());
+        userModel.setEmail(userRequest.getEmail());
+        userModel.setMobile(userRequest.getMobile());
+        userRepoMongo.save(userModel);
+    }
+    public void deleteById(ObjectId userId)throws Exception{
+        com.feb2023.model.MongoModels.UserModel userModel = userRepoMongo.findById(userId).orElseThrow(()->new Exception("No User Found"));
+       userRepoMongo.delete(userModel);
+    }
+    public void userUpdateByIdMongodb(UserRequest userRequest)throws Exception{
+            ObjectId objId = new ObjectId(userRequest.getUserIdStr());
+        com.feb2023.model.MongoModels.UserModel userModel = userRepoMongo.findById(objId).orElseThrow(()->new Exception("No User Found"));
+        if(Objects.nonNull(userRequest.getEmail())) {
+            userModel.setEmail(userRequest.getEmail());
+        }if(Objects.nonNull(userRequest.getMobile())){
+            userModel.setMobile(userRequest.getMobile());
+        }if(Objects.nonNull(userRequest.getDob() )){
+            userModel.setDob(userRequest.getDob().toString());
+        }
+       userRepoMongo.save((userModel));//existing user update.
+    }
+    //@Cacheable(value = "squareCache",key = "#number",condition = "#number>10")
+    public BigDecimal square(Long number) {
+        BigDecimal square = BigDecimal.valueOf(number).multiply(BigDecimal.valueOf(number));
+        logger.info("square of {} is {}", number, square);
+        return square;
     }
 }
