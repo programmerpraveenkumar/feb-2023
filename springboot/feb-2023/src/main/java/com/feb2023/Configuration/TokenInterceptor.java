@@ -2,6 +2,7 @@ package com.feb2023.Configuration;
 
 import com.feb2023.Response.GeneralResponse;
 import com.feb2023.service.SampleService;
+import com.feb2023.service.UserService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         false->stop the execution.
     */
     @Autowired
-    SampleService sampleService;//create the object for service class.
+    UserService userService;//create the object for service class.
     private Boolean isExcludeUrls(String url){
         url = url.replace("/","");
         logger.info(url);
@@ -48,7 +49,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");///get the token from the header
         String user_id = request.getHeader("user_id");///get the token from the header
         if(Objects.nonNull(token) ||Objects.nonNull(user_id)){
-            sampleService.validateTokenAgainstTheUser(token,user_id);//throw exception.
+            userService.validateTokenAgainstTheUser(token,user_id);//throw exception.
             return true;
         }else{
            throw new CustomException("token or userid is empty");

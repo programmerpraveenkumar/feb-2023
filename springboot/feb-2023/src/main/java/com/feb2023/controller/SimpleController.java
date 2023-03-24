@@ -66,6 +66,8 @@ U->update the data (update)
 D->delete the data(delete)
  */
 @RestController
+@RequestMapping("simple")
+//@CrossOrigin(allowedHeaders = "*",origins = "*")
 public class SimpleController {
     @Autowired
     SampleService sampleService;//create the object for service class.
@@ -102,30 +104,11 @@ public class SimpleController {
 //    public String getAge(@RequestParam String pageNo){
 //        return "Page no is "+pageNo;
 //    }
-    @GetMapping("getUser")//localhost:8080/name
-    public ResponseEntity<?> getUseLists(){
-        try{
-            List<UserModel> user = sampleService.getUser();
-            return ResponseEntity.ok(user);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api "+e.getMessage()));
-        }
 
-    }
-    @GetMapping("getUser/email")//localhost:8080/name
-    public ResponseEntity<?> getUseList(@RequestParam String email){
-        try{
-             UserModel user = sampleService.getUser(email);
-            return ResponseEntity.ok(user);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api"+e.getMessage()));
-        }
 
-    }
 
     @GetMapping("testupdate")
     public ResponseEntity<String> update(){
-        sampleService.updateNameByid("tetname",5);
         return ResponseEntity.ok("udpate ");
     }
     @PostMapping("otpValidate")
@@ -142,56 +125,8 @@ public class SimpleController {
     public String pathVariableGET(@PathVariable String id){
         return "user id "+id;
     }
-    @PostMapping("register")
-    public ResponseEntity registerUser(@RequestBody  UserRequest userRequest)throws Exception {
-            UserModel userModel = sampleService.registerUser(userRequest);
-            return ResponseEntity.ok(userModel);
 
-    }
-    @DeleteMapping("deleteUser/{type}")
-    public ResponseEntity deleteUserById(@RequestBody  UserRequest userRequest,@PathVariable String type,@RequestHeader String user_id)throws Exception{
-            GeneralResponse generalResponse = new GeneralResponse();
-            //check the header userid with request userid
-            if(!user_id.equals(userRequest.getUserId())){
-                throw new Exception("Don't have permission to update the user details");
-            }
-            sampleService.deleteUser(type,""+userRequest.getUserId());
-            generalResponse.setMessage("User is deleted");
-            return ResponseEntity.ok(generalResponse);
 
-    }
-    @PutMapping("updateUserById")
-    public ResponseEntity updateUserById(@RequestBody  UserRequest userRequest,@RequestHeader String user_id)throws Exception{
-            if(!user_id.equals(""+userRequest.getUserId())){
-                throw new Exception("Don't have permission to update the user details");
-            }
-           UserModel userModel =  sampleService.updateUserByid(userRequest);
-            return ResponseEntity.ok(userModel);
-
-    }
-    @PutMapping("updateUserByEmail")
-    public ResponseEntity updateUserByEmail(@RequestBody  UserRequest userRequest)throws Exception{
-
-            UserModel userModel =  sampleService.updateUserByEmail(userRequest);
-            return ResponseEntity.ok(userModel);
-
-    }
-
-    @PostMapping("login")
-    public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest)throws Exception{
-            logger.info("inside login validation");
-           UserModel userModel =  sampleService.login(userRequest.getEmail(),userRequest.getPassword());
-            return ResponseEntity.ok(userModel);
-
-        //return userRequest.getName()+" "+userRequest.getAddress()+" "+userRequest.getEmail();
-    }
-    @PostMapping("logout")
-    public ResponseEntity logout(@RequestHeader String user_id)throws Exception{
-            GeneralResponse generalResponse = new GeneralResponse();
-            sampleService.logout(Integer.parseInt(user_id));
-            generalResponse.setMessage("logout successful");
-            return ResponseEntity.ok(generalResponse);
-    }
     @PostMapping("sendEmail")
     public ResponseEntity sendEmail(@RequestBody EmailContent request)throws Exception{
 
@@ -202,69 +137,7 @@ public class SimpleController {
         return ResponseEntity.ok(generalResponse);
     }
 
-    @GetMapping("getUserListFromAnotherServer")
-    public ResponseEntity getUserListFromAnotherServer()throws Exception{
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.add("user-agent", "Chrome/54.0.2840.9");
-//        headers.add("token", "token value");
-//        headers.add("user_id", "user_id value");
-        //headers.setAccept();
-        HttpEntity <String> entity = new HttpEntity<String>(headers);
-        UserServerResponse response = restTemplate.exchange("https://reqres.in/api/users?page=2", HttpMethod.GET,entity, UserServerResponse.class).getBody();
-        logger.info(response.getData().toString());
-        return ResponseEntity.ok(response);
-    }
 
-    @GetMapping("testactivemq")
-    public ResponseEntity<?> sendMessage(@RequestParam String message) throws Exception{
-
-
-        sampleService.publishMessage(message);
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("message sent");
-        return ResponseEntity.ok(generalResponse);
-    }
-    @JmsListener(destination = "mar2023")
-    public void onMessage(Message message) {
-        try{
-            ActiveMQTextMessage objectMessage = (ActiveMQTextMessage) message;
-            //    log.info("Received Message: "+ message.getBody(String.class));
-            logger.info("Received Message: "+ objectMessage.getText());
-
-            //call the userservice
-        } catch(Exception e) {
-            logger.error("Received Exception : "+ e);
-        }
-    }
-    @GetMapping("testmongodb")
-    public ResponseEntity<?> printUserListFromMongo() throws Exception{
-        List<com.feb2023.model.MongoModels.UserModel> userModelList = sampleService.printUserListFromMongo();
-        return ResponseEntity.ok(userModelList);
-    }
-    @PostMapping("createUserMongo")
-    public ResponseEntity<?> createUserMongo(@RequestBody UserRequest userRequest)throws Exception{
-        sampleService.insertUserInMongo(userRequest);
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("Register ok");
-        return ResponseEntity.ok(generalResponse);
-    }
-    @GetMapping("deleteUserMongo")
-    public ResponseEntity<?> deleteById(@RequestParam String id)throws Exception{
-        ObjectId idObj = new ObjectId(id);
-        sampleService.deleteById(idObj);
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("user Deleted");
-        return ResponseEntity.ok(generalResponse);
-    }
-
-    @PostMapping("updateUserMongo")
-    public ResponseEntity<?> userUpdateById(@RequestBody UserRequest userRequest)throws Exception{
-        sampleService.userUpdateByIdMongodb(userRequest);
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("User is updated!!!");
-        return ResponseEntity.ok(generalResponse);
-    }
 
     @GetMapping("testcache")
     public ResponseEntity testcache(@RequestParam Long number){
@@ -273,6 +146,8 @@ public class SimpleController {
         generalResponse.setMessage(""+squareval);
         return ResponseEntity.ok(generalResponse);
     }
+
+
 
     @PostMapping("fileupload")
     public ResponseEntity<?> fileupload(@RequestParam MultipartFile file)throws CustomException {

@@ -30,6 +30,8 @@ public class UserModel implements Serializable  {
 
     LocalDate dob;
 
+    String img_name;
+
     @OneToOne
     @JoinColumn(name = "country",referencedColumnName = "id")
     CountryModel countryModel;
