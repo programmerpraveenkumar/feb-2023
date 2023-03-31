@@ -1,0 +1,16 @@
+.menu li{
+    display: inline-block;
+    background-color: aqua;
+    color: #fff;
+    padding: 10px;
+    font-size: 25px;
+}
+             
+/* browser window is 600px or smaller,  */
+@media only screen and (max-width: 600px){
+.menu li{
+    display: block;
+    margin-top: 5px;
+    font-size: 15px;
+}
+}

@@ -103,7 +103,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest)throws Exception{
+        public ResponseEntity loginValidation(@RequestBody  UserRequest userRequest)throws Exception{
         logger.info("inside login validation");
         UserModel userModel =  userService.login(userRequest.getEmail(),userRequest.getPassword());
         return ResponseEntity.ok(userModel);
@@ -156,10 +156,12 @@ public class UserController {
     }
     @GetMapping("deleteUserMongo")
     public ResponseEntity<?> deleteById(@RequestParam String id)throws Exception{
+        logger.info("deleteById start");
         ObjectId idObj = new ObjectId(id);
         userService.deleteById(idObj);
         GeneralResponse generalResponse = new GeneralResponse();
         generalResponse.setMessage("user Deleted");
+        logger.info("deleteById end");
         return ResponseEntity.ok(generalResponse);
     }
 

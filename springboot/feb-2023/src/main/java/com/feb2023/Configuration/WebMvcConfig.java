@@ -22,4 +22,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**").
                 allowedOrigins("*").allowedHeaders("*");
     }
+    //cross origin issue
 }

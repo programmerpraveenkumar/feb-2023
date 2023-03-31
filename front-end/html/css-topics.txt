@@ -1,0 +1,8 @@
+inline->priority(1)
+internal->priority(2)
+external->priority(3)
+
+best to use
+external(faster,browser will cache the css )
+internal
+inline will take time to load the page

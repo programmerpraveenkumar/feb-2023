@@ -1,0 +1,59 @@
+
+.web-container{
+    width: 80%;
+    margin: 0 auto;
+   
+}
+header{
+ 
+    background-color: bisque;
+    text-align: center;/*only children will move to center*/
+}
+
+.menu li{
+        display: inline-block;
+        margin-right: 15px;
+        padding: 5px;
+}
+.menu.menu-vertical{
+    margin: 0;
+    padding: 0;
+}
+.menu.menu-vertical li{
+    display: block;
+}
+.menu li a{
+    font-size: 25px;;
+    text-decoration: none;
+    padding: 5px;
+}
+/* while hovering on the element */
+.menu li a:hover{
+        color: #0c0b0b;
+}
+section{
+    overflow: auto;
+}
+.side-box{
+    height: 350px;
+    border:5px solid #e7d1ac;
+    border-radius: 5px;
+    width: 20%;
+}
+.left-box{
+    float:left;
+}
+.page-content{
+    width: 55%;
+    float: left;
+    text-align: center;
+}
+.right-box{
+    float: right;
+}
+footer h2{
+    text-align: center;
+}
+a.active{
+    background: azure;
+}
