@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <script>
+        console.log("Hello javascript");
+        console.log("this is another print");
+        /*
+        var,let,const
+        */
+       const firstName = "sample first name";
+     //firstName = "update the new name";//wil throw the error
+       console.log(firstName);//update the vairable.
+       var lastName = "sample last name";
+       console.log(lastName);
+       let countryName = "sample country name"; 
+       console.log(countryName);
+       var lastName = "updated last name";//redeclare the variable.
+       console.log(lastName)
+       countryName  = "another country name";
+    //    let countryName = "update country name"; //cant redeclare the variable.
+        console.log(countryName);
+        {
+           var lastName = "updated new last name";//redeclare the variable.
+            countryName = "sample country in the block";
+            console.log(countryName);
+            console.log(lastName)
+            let newVariable = "soem value";
+            const firstNameadsf = "sample first name";
+        }
+        {
+                //console.log(newVariable);//cant access from abaove scope.
+        }
+        console.log(countryName);
+        console.log(firstNameadsf);
+        console.log(lastName)
+
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

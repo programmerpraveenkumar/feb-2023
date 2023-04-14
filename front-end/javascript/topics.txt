@@ -1,0 +1,38 @@
+1.javascript can  develop web apis using expressjs and node.
+2.it adds programming logics to the website
+3.validation for the input elements,handling the events(mouse,keyboard)
+4.get the data from server without refresh the server.(ajax)
+5.oops concepts also available.
+
+
+javascript ends with .js
+javascript can be included using internal and external
+internal:
+    need to declare the javascript between script tag in the html page
+
+external:
+    declare the js in separate file and include into the htmlt page.
+
+
+
+javascript arrays.
+index array
+    index position starts with 0.
+    by adding the value it gets increased.
+    need to use square bracket [];
+
+object 
+    object position we need to provide
+    by adding the key and value.
+    need to use curly braces {};
+
+function sample(){
+
+
+}
+
+arrow function
+()->{
+
+
+}

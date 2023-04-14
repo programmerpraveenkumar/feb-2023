@@ -1,0 +1,74 @@
+to install the anagular
+npm install -g @angular/cli
+
+
+to create angular application
+ng new my-app -- to create angular app
+ng new my-app --routing
+
+npm install->to install the dependencies in exsting project
+
+to run the appliation
+ng serve
+
+
+
+
+home.html->header+homeContent+footer
+about.html->header+AboutContent+footer
+contact.html->header+contactContent+footer
+
+
+
+html css javascript 
+why angular
+
+
+component architecture
+1.can reuse the component
+2.use it for routing the pages.
+
+headercomponent->header content
+footerComponent->footer content
+
+home.html->headercomponent+homeContent+footerComponent
+about.html->headercomponent+homeContent+footerComponent
+contact.html->headercomponent+homeContent+footerComponent
+
+localhost:4200/home->HomeComponent
+localhost:4200/about->AboutComponent
+localhost:4200/contact->ContactComponent
+
+
+
+ng g c home
+ng->angular
+g->generate
+c-> component
+
+
+
+
+
+
+
+Component
+	will have 4 different files.
+	html,css,ts,spec.ts
+
+Html,ts
+
+
+
+	
+services
+directives
+pipes
+rest api integration
+data binding
+build the application.
+deploy the application
+
+
+
+

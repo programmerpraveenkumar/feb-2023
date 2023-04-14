@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        function sampleLog(){
+            console.log("sample output");
+            alert("sample alert");
+        }
+        function showAlert(){
+            alert("another message");
+        }
+       
+        function getValueFromInput(){
+            ///get the value from the input using id;
+            let val = document.getElementById("input_ele").value;
+            let val1 = document.getElementById("input_ele1").value;
+            console.log(val,val1);
+        }
+        function writeInTheDiv(){
+            //write into the html element
+            document.getElementById("html_div").innerHTML = "write from the javascript";
+            document.getElementById("sample_h1").innerHTML = "write from the javascript";
+        }
+        
+    </script>
+</head>
+<body>
+    <button onclick="sampleLog()">Click me to print in the console</button>
+    <button onclick="showAlert()">Click me to show alert</button>
+    <div onclick="sampleLog()">Sample div</div>
+    <input type="text" placeholder="Enter The input" id="input_ele">
+    <input type="text" placeholder="Enter The input" id="input_ele1">
+    <button onclick="getValueFromInput()">Get the value of the input</button>
+    <div id="html_div"></div>
+    <button onclick="writeInTheDiv()">Write into the div</button>
+    <h1 id="sample_h1"></h1>
+
+    
+
+</body>
+</html>

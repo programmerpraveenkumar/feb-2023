@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        /*
+            api end point,
+            method type(get or post)
+            params to send
+
+        fetch method is promise.so it will return either success or failure.
+
+        */
+    function sampleServercallGet(){
+            //`then` will call once the respose recvd from the server
+            fetch("https://reqres.in/api/users?page=2",{method:"GET"})
+            .then(res=>res.json())//extract the json from the server response.
+            .then(res2=>{
+                    console.log(res2);
+                    document.getElementById("response").innerHTML = JSON.stringify(res2);
+
+            })
+    }
+    function sampleServercallPost(){
+        let params = {
+            "name": "morpheus",
+            "job": "leader"
+        };
+        //body will applicable ony for post method.
+        fetch("https://reqres.in/api/users",{method:"POST",body:JSON.stringify(params)})
+        .then(res=>res.json())//extract the json from the server response.
+            .then(res2=>{
+                    console.log(res2);
+                    document.getElementById("response").innerHTML = JSON.stringify(res2);
+            })
+    }
+    
+
+    </script>
+        
+</head>
+<body>
+    <div id="response"></div>
+    <button onclick="sampleServercallGet()">GET call</button>
+    <button onclick="sampleServercallPost()">Post Call</button>
+</body>
+</html>

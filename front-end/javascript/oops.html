@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        class Person{
+            firstName="sample name";//variable declaration.
+            //constructor will be called during the object creation of this class.
+            constructor(){
+                console.log("this is inside the constructor");
+            }
+            printName(){
+                console.log("this is inside personclass..name is ",this.firstName);
+            }
+            printAddress(address){
+                console.log("this is address.inside the person class",address);
+            }
+        }
+        let person = new Person();//create an object for person
+        person.firstName = 'new value';//access variable using object
+        person.printName();//calling method using object.
+        person.printAddress("sample address");
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

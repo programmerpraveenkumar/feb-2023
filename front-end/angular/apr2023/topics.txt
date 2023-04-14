@@ -1,0 +1,29 @@
+Rest api integration
+1.httClientModule in app.module.ts
+2.httpClient in the component.
+    (need to use constructor injection)
+
+angular services
+    cannot interact with ui
+    we can implement the logics
+    services can be used in all over the app.
+
+To create Services:
+ng g s common
+
+pipes
+uppercase
+
+custom pipe:
+2->4
+5->25
+ng g p square
+
+Rest api integration wit post
+headers in rest api
+handlign error in rest api.
+page routing in angular from button click
+login token authentication.
+data exchanges between components.
+web template integration.
+Modal dialog implementation

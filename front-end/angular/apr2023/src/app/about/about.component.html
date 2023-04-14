@@ -1,0 +1,31 @@
+<app-header></app-header>
+<!--
+    one way data binding 
+        variable value can be change in  ts 
+    two way data binding 
+        variable value can be change in html or ts
+-->
+<h1>{{inputName}}</h1>
+<input [(ngModel)]="inputName" type="text" placeholder="Enter Name"/>
+<input [(ngModel)]="mobileNumber" type="text" placeholder="Enter Mobile"/>
+<button (click)="validateInput()">Click to validate</button>
+<h1>about works!</h1>
+
+<button (click)="getHttpResponse()">getHttpResponse</button>
+<select [(ngModel)]="pageNo" (change)="getHttpResponse()">
+    <option value="1">Page 1</option>
+    <option value="2">Page 2</option>
+    <option value="3">Page 3</option>
+    <option value="4">Page 4</option>
+
+</select>
+<div *ngFor="let user of userList">
+   <h3> {{user.first_name}}--{{user.email}}</h3>
+   <img src="{{user.avatar}}" alt="">
+</div>
+<h1 *ngIf="userList.length == 0">No User Found</h1>
+{{someTxt | uppercase}}
+<h2>{{currentDate | date :'fullTime'}}</h2>
+<h3>{{price | currency : 'Rs'}}</h3>
+<h3>{{price | square}}</h3>
+<h3>{{num | square}}</h3>

@@ -1,0 +1,53 @@
+<app-header></app-header>
+<h1>home works!</h1>
+<h1>{{firstName}}</h1>
+<h2>{{lastName}}</h2>
+
+<!-- 
+    directives 
+ngFor->iterate the array and bind the value in the html
+ngIf->show or hide the element in the html based on the boolean condition
+ngClass->css classes can be loaded using boolean condition.
+-->
+
+<div *ngFor="let v of nameList">{{v}}</div>
+
+<h1 *ngFor="let v of nameAgeList">
+    Name is <span class="name">{{v.name}}.</span>
+    His age is  {{v.age}}
+</h1>
+
+<h1> <i> hide the people whose age is above 30</i></h1>
+<div *ngFor="let v of nameAgeList">
+    <h1 *ngIf="v.age < 30">
+        Name is <span class="name">{{v.name}}.</span>
+        His age is  {{v.age}}
+    </h1>
+    
+</div>
+
+<h1><i>
+    highlight the people whose age is above 30
+</i></h1>
+    
+<div *ngFor="let v of nameAgeList">
+    <h1 [ngClass]="v.age > 30?'redcolor':''">
+        Name is <span class="name">{{v.name}}.</span>
+        His age is  {{v.age}}
+    </h1>
+    
+</div>
+{{""+isShow}}
+<h1 *ngIf="isShow">SHow or Hide</h1>
+<!-- 
+    onclick-.javascript mouse click
+    (click)-> angular mouse click
+ -->
+<button (click)="showOrHideTheElement()">show or hide above element</button>
+<h1 [ngClass]="cssClassName">Sample heading</h1>
+<button (click)="changeCssClass('redcolor')">Red</button>
+<button (click)="changeCssClass('greencolor')">Green</button>
+<button (click)="changeCssClass('bluecolor')">Blue</button>
+
+<h1 [ngClass]="isRed?'redcolor':'bluecolor'">Sample heading</h1>
+<button (click)="cssClassIfCondition()">red Or Blue For above Element</button>

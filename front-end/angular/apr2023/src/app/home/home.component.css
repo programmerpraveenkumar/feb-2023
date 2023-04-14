@@ -1,0 +1,17 @@
+span.name{
+    color: red;
+}
+
+
+.redcolor{
+    background-color: red;
+    color: #fff;
+}
+.greencolor{
+    background-color: #8cff00;
+    color: #fff;
+}
+.bluecolor{
+    background-color: #1e00ff;
+    color: #fff;
+}

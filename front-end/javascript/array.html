@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+            var nameList = ["first","second","third","fourth","five"];
+            console.log(nameList);
+            console.log(nameList[3]);//access the element using position
+            nameList[3] = "update the value";
+            nameList[5]="another value";
+            console.log(nameList[3]);
+            for(let start=0;start<nameList.length;start++){
+                console.log(start,nameList[start]);
+            }
+
+            for(let index in nameList){
+                console.log(index,nameList[index]);
+            }
+            //foreach without index
+            nameList.forEach((val)=>{
+                console.log(val);
+            })
+            //foreach with index
+            nameList.forEach((val,key)=>{
+                console.log("index and key "+key,val);
+            })
+            var nameList1 = new Array("first","second","third",4);
+            console.log(nameList1);
+            console.log(nameList1[3]);
+            nameList1[3] = "update the value";
+            console.log(nameList1[3]);
+            console.log(nameList1[2]);
+            console.log(nameList1[12]);
+        </script>
+</head>
+<body>
+    
+</body>
+</html>

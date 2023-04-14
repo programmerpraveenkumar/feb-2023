@@ -1,0 +1,15 @@
+textarea,input,button{
+    width: 80%;
+    margin: 10px 0;
+}
+textarea{
+    resize: none;
+    height: 150px;;
+}
+
+.form{
+    border:1px solid #000;
+    width:50%;
+    text-align: center;
+
+}

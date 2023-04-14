@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        //array of objects
+        let userList = [
+            {"name":"sample1","address":"sample address","mobile":4545454},//0index
+            {"name":"sample2","address":"sample address2","mobile":78978},//1-index
+            {"name":"sample3","address":"sample address3","mobile":123123},//2-index
+        ];
+        userList[3]={"name":"sample4","address":"sample address4","mobile":56565}
+        console.log(userList)
+        console.log(userList[0]);
+        console.log(userList[1]);
+        for(let index in userList){
+            for(let key in userList[index]){
+                console.log(key,userList[index][key]);
+            }                
+            console.log("--------");
+        }
+        userList.forEach(val=>{
+            for(let key in val){
+                console.log(key,val[key]);
+            }                
+            console.log("--------");
+        })
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

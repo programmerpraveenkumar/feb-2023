@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- include the js into the html -->
+    <script src="oops.js"></script>
+    <script>
+      
+        let person = new Person();//create an object for person
+        person.firstName = 'new value';//access variable using object
+        person.printName();//calling method using object.
+        person.printAddress("sample address");
+        
+    </script>
+</head>
+<body>
+    <input type="text" placeholder="Enter Name" id="name">
+    <input type="text" placeholder="Enter Address" id="address">
+    <button onclick="person.printDetails()">Click me to call the js function</button>
+</body>
+
+</html>
