@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonService } from '../common.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,12 +8,16 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
   @Output() toParent = new EventEmitter();//sending data to parent
-  constructor() { }
+  constructor(private common:CommonService) { }
 
   ngOnInit(): void {
   }
   sendDataToParent(){
     this.toParent.emit("from footer");
+  }
+
+  publishMessage(){
+    this.common.eventService.next("from footer to other components");
   }
 
 }

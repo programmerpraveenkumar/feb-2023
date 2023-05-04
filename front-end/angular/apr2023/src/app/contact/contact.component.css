@@ -1,4 +1,4 @@
-textarea,input,button{
+textarea,input,button.send{
     width: 80%;
     margin: 10px 0;
 }

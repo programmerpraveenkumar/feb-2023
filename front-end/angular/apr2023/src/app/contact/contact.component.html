@@ -3,13 +3,15 @@
 <div class="form">
     <h1>Contact us</h1>
     <div>
-        <input type="text" placeholder="Enter Name"/>
+        <input type="text" [(ngModel)]="form.name" placeholder="Enter Name"/>
     </div>
     <div>
-        <textarea type="text" placeholder="Enter Message"></textarea>
+        <textarea type="text" [(ngModel)]="form.message" placeholder="Enter Message"></textarea>
     </div>
     <div>
-        <button>Click to send</button>
+        <button (click)="validateValues()" class="send">Click to send</button>
     </div>
 </div>
+<button class="btn btn-primary">Sample btn</button>
+<app-alert [errorMessage] ="errorMessage" ></app-alert>
 <app-footer (toParent)="recvFunction($event)"></app-footer>

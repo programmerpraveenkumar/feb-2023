@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CommonService } from '../common.service';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Input() fromParent ="";//value is coming from the parent component.
-  constructor() { }
+  constructor(private common:CommonService) {
+    this.common.eventService.subscribe(res=>{
+      console.log("message from the publisher..",res);
+    })
+   }
   ngOnInit(): void {
   }
 

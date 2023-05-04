@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SquarePipe } from './square.pipe';
 import { FooterComponent } from './footer/footer.component';
+import { AlertComponent } from './alert/alert.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { FooterComponent } from './footer/footer.component';
     ContactComponent,
     HeaderComponent,
     SquarePipe,
-    FooterComponent
+    FooterComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
