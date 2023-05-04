@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from '../common.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,7 +23,16 @@ export class HomeComponent implements OnInit {
 
   ];
 
-  constructor(private common:CommonService) { }
+  userRes:any=[];
+  constructor(private common:CommonService,private http:HttpClient) {
+    //this.getUser();
+   } 
+  getUser(){    
+    this.http.get("http://localhost:8080/getUser").subscribe(res=>{
+      this.userRes = res;
+      //this.common.showAlert("sample");
+    })
+  }
   showOrHideTheElement(){
     //`this` access global variable
     this.isShow = !this.isShow;

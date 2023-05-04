@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header fromParent="contact"></app-header>
 
 <div class="form">
     <h1>Contact us</h1>
@@ -12,3 +12,4 @@
         <button>Click to send</button>
     </div>
 </div>
+<app-footer (toParent)="recvFunction($event)"></app-footer>

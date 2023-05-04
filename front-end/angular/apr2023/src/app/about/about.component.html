@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header  fromParent="about"></app-header>
 <!--
     one way data binding 
         variable value can be change in  ts 
@@ -29,3 +29,14 @@
 <h3>{{price | currency : 'Rs'}}</h3>
 <h3>{{price | square}}</h3>
 <h3>{{num | square}}</h3>
+<button (click)="getHttpError()">getHttpError</button>
+<h1>{{erroResponse}}</h1>
+<h1>Create the User</h1>
+<div><input type="text" [(ngModel)]="apiFieldName" placeholder="Enter Name"></div>
+<div><input type="text" [(ngModel)]="apiFieldJob" placeholder="Enter Job" ></div>
+<div>{{response.createdAt}}</div>
+<button (click)="postHttpRequest()">Create User</button>
+
+<div><input type="text" [(ngModel)]="registerForm.name" placeholder="Enter Name"></div>
+<div><input type="text" [(ngModel)]="registerForm.mobile" placeholder="Enter Mobile" ></div>
+<button (click)="navigateHome()">Click to naviagate to Home</button>

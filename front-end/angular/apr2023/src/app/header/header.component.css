@@ -2,3 +2,13 @@ li{
     display: inline-block;
     margin: 10px;
 }
+
+li a.active{
+    background-color: red;
+    color: #fff;
+
+}
+li a{
+
+    padding: 10px;
+}

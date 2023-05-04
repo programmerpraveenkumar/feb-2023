@@ -13,5 +13,7 @@ export class ContactComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  recvFunction(data:any){
+    console.log(data);
+  }
 }

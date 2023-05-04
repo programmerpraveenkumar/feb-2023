@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header  fromParent="home"></app-header>
 <h1>home works!</h1>
 <h1>{{firstName}}</h1>
 <h2>{{lastName}}</h2>
@@ -25,7 +25,10 @@ ngClass->css classes can be loaded using boolean condition.
     </h1>
     
 </div>
-
+<div *ngFor="let v of userRes">
+        Name is <span class="name">{{v.name}}.</span>
+        email is  {{v.email}}
+</div>
 <h1><i>
     highlight the people whose age is above 30
 </i></h1>
@@ -34,8 +37,7 @@ ngClass->css classes can be loaded using boolean condition.
     <h1 [ngClass]="v.age > 30?'redcolor':''">
         Name is <span class="name">{{v.name}}.</span>
         His age is  {{v.age}}
-    </h1>
-    
+    </h1>    
 </div>
 {{""+isShow}}
 <h1 *ngIf="isShow">SHow or Hide</h1>
@@ -51,3 +53,4 @@ ngClass->css classes can be loaded using boolean condition.
 
 <h1 [ngClass]="isRed?'redcolor':'bluecolor'">Sample heading</h1>
 <button (click)="cssClassIfCondition()">red Or Blue For above Element</button>
+<app-footer></app-footer>

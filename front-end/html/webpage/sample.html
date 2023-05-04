@@ -1,0 +1,17 @@
+<html>
+    <head>
+       
+    </head>
+    <body>
+        <div id="res"></div>
+    </body>
+    <script>
+        fetch("http://localhost:8080/getUser")
+        .then(res=>res.json())
+        .then(res2=>{
+                console.log(res2);
+                document.getElementById("res").innerHTML = JSON.stringify(res2);
+            }
+        )
+    </script>
+</html>

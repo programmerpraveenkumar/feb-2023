@@ -42,16 +42,22 @@ public class UserController {
     private static String UPLOADED_FOLDER = "/Volumes/softwares/projects/upload_folder/";
     @Autowired
     RestTemplate restTemplate;
+
     @GetMapping("getUser")//localhost:8080/name
     public ResponseEntity<?> getUseLists(){
-        try{
-            List<UserModel> user = userService.getUser();
-            return ResponseEntity.ok(user);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api "+e.getMessage()));
-        }
-
+        List<String> strList = Arrays.asList("test","test2","test3");
+        return ResponseEntity.ok(strList);
     }
+//    @GetMapping("getUser")//localhost:8080/name
+//    public ResponseEntity<?> getUseLists(){
+//        try{
+//            List<UserModel> user = userService.getUser();
+//            return ResponseEntity.ok(user);
+//        }catch (Exception e){
+//            return ResponseEntity.badRequest().body(new GeneralResponse("Error in api "+e.getMessage()));
+//        }
+//
+//    }
     @GetMapping("getUser/email")//localhost:8080/name
     public ResponseEntity<?> getUseList(@RequestParam String email){
         try{

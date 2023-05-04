@@ -11,6 +11,8 @@ angular services
 To create Services:
 ng g s common
 
+directives:
+ngFor,ngIf,ngClass
 pipes
 uppercase
 
@@ -23,7 +25,12 @@ Rest api integration wit post
 headers in rest api
 handlign error in rest api.
 page routing in angular from button click
-login token authentication.
+
 data exchanges between components.
+    parent to child component
+    child to parent component
+    publish and subscribe
+
 web template integration.
 Modal dialog implementation
+login token authentication.
