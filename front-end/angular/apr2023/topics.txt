@@ -30,8 +30,12 @@ data exchanges between components.
     parent to child component->input()
     child to parent component->Output()
     publish and subscribe
-
-
 Modal dialog implementation
 web template integration.
-login token authentication.
+login token authentication.\
+
+
+
+WebTemplate integration:
+create the web folder in the app
+create the compoent in the web folder

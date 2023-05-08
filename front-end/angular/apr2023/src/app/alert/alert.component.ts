@@ -6,16 +6,17 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./alert.component.css']
 })
 export class AlertComponent implements OnInit {
-  isShow = true;
+  // errorMessage is coming from parent
   @Input() errorMessage = "";
   constructor() {
-    console.log(this.errorMessage)
+   // console.log(this.errorMessage)
    }
 
   ngOnInit(): void {
   }
 
   closeDialog(){
+    //while closing clearing the error message
     this.errorMessage  = "";
   }
 }

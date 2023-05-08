@@ -23,6 +23,7 @@ export class ContactComponent implements OnInit {
     console.log(data);
   }
   validateValues(){
+    this.errorMessage = "";
     if(this.form.name == ""){
       this.errorMessage = "Please Enter Name";
     }

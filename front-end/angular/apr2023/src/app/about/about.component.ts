@@ -21,7 +21,8 @@ export class AboutComponent implements OnInit {
   apiFieldName = "";
   apiFieldJob = "";
   erroResponse = "";
-  registerForm={"name":"","mobile":"","address":""}
+  registerForm={"name":"","mobile":"","address":""};
+  errorMessageVal = "";
   //constructor injection
   constructor(private http:HttpClient,private common:CommonService,private router:Router ) { }
 
@@ -62,9 +63,11 @@ export class AboutComponent implements OnInit {
       "token":"sample token"
     })
     if(this.apiFieldName == ""){
-      this.common.showAlert("Please Enter the Name");
+      //this.common.showAlert("Please Enter the Name");
+      this.errorMessageVal = "Please Enter Name";
     }else if(this.apiFieldJob == ""){
-      this.common.showAlert("Please Enter the Job");
+      //this.common.showAlert("Please Enter the Job");
+      this.errorMessageVal = "Please Enter Job";
     }
 
     let params = {

@@ -13,7 +13,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { SquarePipe } from './square.pipe';
 import { FooterComponent } from './footer/footer.component';
 import { AlertComponent } from './alert/alert.component';
-
+import { ServiceComponent } from './web/service/service.component';
+import { HomeComponent as webHomeComponent} from './web/home/home.component';
+import {ContactComponent as webContactComponent} from './web/contact/contact.component';
+import { AboutComponent as webAboutComponent} from './web/about/about.component';
+import { WebHeaderComponent } from './web/web-header/web-header.component';
+import { FooterComponent as WebFooterComponent } from './web/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +29,13 @@ import { AlertComponent } from './alert/alert.component';
     HeaderComponent,
     SquarePipe,
     FooterComponent,
-    AlertComponent
+    AlertComponent,
+    ServiceComponent,
+    webHomeComponent,
+    webContactComponent,
+    webAboutComponent,
+    WebHeaderComponent,
+    WebFooterComponent
   ],
   imports: [
     BrowserModule,
