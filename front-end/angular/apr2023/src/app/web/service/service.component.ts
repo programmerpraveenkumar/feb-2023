@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonService } from 'src/app/common.service';
 
 @Component({
   selector: 'app-service',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./service.component.css']
 })
 export class ServiceComponent implements OnInit {
-
-  constructor() { }
+  businessActions:any=[];
+  constructor(private common:CommonService) {
+    this.businessActions = this.common.getBusinessActions();
+   }
 
   ngOnInit(): void {
   }
+ 
 
 }
