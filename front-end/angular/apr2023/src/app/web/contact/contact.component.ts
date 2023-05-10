@@ -29,8 +29,24 @@ export class ContactComponent implements OnInit {
       this.common.showAlert("Please Enter the mobile")
       return;
     }else{
+      let params = {
+        "name":this.contactForm.name,
+        "phoneNo":this.contactForm.mobile,
+        "email":this.contactForm.email,
+        "message":this.contactForm.message
+      }
+      this.common.saveContact(params).subscribe(res=>{
+        alert("Stored Sucessfully");
+        this.contactForm.name = "";
+        this.contactForm.mobile = "";
+        this.contactForm.email = "";
+        this.contactForm.message = "";
+
+      },err=>{
+        alert("Error while storing");
+      });;
       //rest api
-      this.common.showAlert("everything is fine.");
+      //this.common.showAlert("everything is fine.");
     }
   }
 

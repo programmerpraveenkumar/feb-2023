@@ -1,7 +1,6 @@
 package com.feb2023.controller;
 
 
- import com.feb2023.Configuration.CustomException;
  import com.feb2023.Request.EmailContent;
 import com.feb2023.Request.UserRequest;
 import com.feb2023.Response.GeneralResponse;
@@ -69,120 +68,6 @@ D->delete the data(delete)
 @RequestMapping("simple")
 //@CrossOrigin(allowedHeaders = "*",origins = "*")
 public class SimpleController {
-    @Autowired
-    SampleService sampleService;//create the object for service class.
 
-    @Autowired
-    Environment environment;
-
-    @Autowired
-    RestTemplate restTemplate;
-    Logger logger = LoggerFactory.getLogger(SimpleController.class);
-
-    private static String UPLOADED_FOLDER = "/Volumes/softwares/projects/upload_folder/";
-
-    //    @Autowired
-//    private JavaMailSender emailSender;
-    @GetMapping("countryname")
-    public String getFromApplicationProps(){
-        String value = environment.getProperty("COUNTRY_NAME");
-        if(value.equals("uk")){
-            return "united kingdom";
-        }
-        if(value.equals("uae")){
-            return "dubai";
-        }
-        return  environment.getProperty("COUNTRY_NAME");
-    }
-
-
-    @GetMapping("name")//localhost:8080/name
-    public String getName(){
-        return "sample name";
-    }
-//    @GetMapping("getUser")//localhost:8080/name
-//    public String getAge(@RequestParam String pageNo){
-//        return "Page no is "+pageNo;
-//    }
-
-
-
-    @GetMapping("testupdate")
-    public ResponseEntity<String> update(){
-        return ResponseEntity.ok("udpate ");
-    }
-    @PostMapping("otpValidate")
-    public String storeUser(@RequestParam String otp){
-        System.out.println("OTP "+otp);
-        return otp;
-    }
-
-    @PostMapping("user/{id}")
-    public String pathVariable(@PathVariable String id){
-        return "user id "+id;
-    }
-    @GetMapping("user/{id}")
-    public String pathVariableGET(@PathVariable String id){
-        return "user id "+id;
-    }
-
-
-    @PostMapping("sendEmail")
-    public ResponseEntity sendEmail(@RequestBody EmailContent request)throws Exception{
-
-
-
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage("Email sent");
-        return ResponseEntity.ok(generalResponse);
-    }
-
-
-
-    @GetMapping("testcache")
-    public ResponseEntity testcache(@RequestParam Long number){
-        BigDecimal squareval =  sampleService.square(number);
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse.setMessage(""+squareval);
-        return ResponseEntity.ok(generalResponse);
-    }
-
-
-
-    @PostMapping("fileupload")
-    public ResponseEntity<?> fileupload(@RequestParam MultipartFile file)throws CustomException {
-            try{
-                logger.error("inside the file upload ");
-
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-                Files.write(path, bytes);//write the file into the location.
-
-                GeneralResponse generalResponse = new GeneralResponse();
-                generalResponse.setMessage("File Name is uploaded success"+file.getOriginalFilename());
-                return ResponseEntity.ok(generalResponse);
-             }catch (Exception e){
-                logger.error("Error while upload ",e.getMessage());
-                throw new CustomException("Error while upload "+e.getMessage());
-            }
-    }
-    @GetMapping("filename/{imgName}")
-    public void getImage(HttpServletResponse response, @PathVariable String imgName)throws CustomException {
-        try{
-            logger.error("inside the file upload ");
-            File file = new File(UPLOADED_FOLDER +imgName);
-            if(!file.exists()){
-                file = new File(UPLOADED_FOLDER +"no-image.jpg");
-            }
-            response.setContentType("image/jpeg");
-            response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
-            response.setContentLength((int) file.length());
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-            FileCopyUtils.copy(inputStream, response.getOutputStream());
-        }catch (Exception e){
-            logger.error("Error while upload ",e.getMessage());
-            throw new CustomException("Error while upload "+e.getMessage());
-        }
-    }
 
 }

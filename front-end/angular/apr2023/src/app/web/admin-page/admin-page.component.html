@@ -1,0 +1,55 @@
+<app-web-header  currentMenu="about"></app-web-header>
+<div class="about_section layout_padding">
+         <div class="container">
+            <h1>Welcome Admin  </h1>
+            <p class="about_text">Please Manage this Website</p>
+            <div class="about_section_2">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h1>Contact Messages</h1>
+                    </div>
+                   </div>
+               <div class="row">
+                  <div class="col-lg-6">
+                    <ul *ngFor="let contactMesssage of contactMessageList" class="list-group list-group-horizontal">
+                        <li class="list-group-item">{{contactMesssage.name}}</li>
+                        <li class="list-group-item">{{contactMesssage.email}}</li>
+                        <li class="list-group-item">{{contactMesssage.phnNo}}</li>
+                        <li class="list-group-item">{{contactMesssage.date}}</li>
+                        <li class="list-group-item">{{contactMesssage.messgae}}</li>
+                      </ul>
+                  </div>                
+               </div>
+               <div class="row">
+                <div class="col-lg-6">
+                    <h1>Business Actions</h1>
+                </div>
+               </div>
+               <div class="row">
+                
+                <div class="col-lg-6">
+                
+                    <input type="text" class="form-control" placeholder="Enter Title"/>                    
+                    <textarea  class="form-control"  placeholder="Message" rows="5" id="comment" name="Message"></textarea>
+                    <div class="btn btn-primary ">Create</div>
+             
+                </div>
+              
+             </div>
+               <div class="row">
+                
+                <div class="col-lg-6">
+                  <ul *ngFor="let contactMesssage of contactMessageList" class="list-group list-group-horizontal">
+                      <li class="list-group-item">{{contactMesssage.name}}</li>
+                      <li class="list-group-item">{{contactMesssage.email}}</li>
+                      <li class="list-group-item">{{contactMesssage.phnNo}}</li>
+                      <li class="list-group-item">{{contactMesssage.date}}</li>
+                      <li class="list-group-item">{{contactMesssage.messgae}}</li>
+                    </ul>
+                </div>
+              
+             </div>
+            </div>
+         </div>
+      </div>
+      <web-app-footer></web-app-footer>

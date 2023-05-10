@@ -19,6 +19,7 @@ import {ContactComponent as webContactComponent} from './web/contact/contact.com
 import { AboutComponent as webAboutComponent} from './web/about/about.component';
 import { WebHeaderComponent } from './web/web-header/web-header.component';
 import { FooterComponent as WebFooterComponent } from './web/footer/footer.component';
+import { AdminPageComponent } from './web/admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { FooterComponent as WebFooterComponent } from './web/footer/footer.compo
     webContactComponent,
     webAboutComponent,
     WebHeaderComponent,
-    WebFooterComponent
+    WebFooterComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,
