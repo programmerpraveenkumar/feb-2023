@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.Repository.BusinessActionRepo;
 import com.example.demo.Repository.ContactRepo;
+import com.example.demo.Request.BusinessActionRequest;
 import com.example.demo.Request.ContactRequest;
 import com.example.demo.model.BusinessActionModel;
 import com.example.demo.model.ContactModel;
@@ -23,6 +24,9 @@ public class SampleService {
 public List<BusinessActionModel> getBusinessAction(){
     return businessActionRepo.findAll();
 }
+    public List<ContactModel> getAllContactMessages(){
+        return contactRepo.findAll();
+    }
 
     public void saveContactMessage(ContactRequest contactRequest){
              ContactModel contactModel = ContactModel.builder()
@@ -32,4 +36,14 @@ public List<BusinessActionModel> getBusinessAction(){
                                     .phoneNo(contactRequest.getPhoneNo()).build();
             contactRepo.save(contactModel);
     }
+    public void saveBusinessActionRequest(BusinessActionRequest businessActionRequest){
+       BusinessActionModel businessActionModel= new BusinessActionModel();
+       businessActionModel.setDescription(businessActionRequest.getDescription());
+       businessActionModel.setTitle(businessActionRequest.getTitle());
+       businessActionRepo.save(businessActionModel);
+    }
+    public void deleteBusinessRequest(BusinessActionRequest businessActionRequest){
+        businessActionRepo.deleteById(businessActionRequest.getId());
+    }
+
 }

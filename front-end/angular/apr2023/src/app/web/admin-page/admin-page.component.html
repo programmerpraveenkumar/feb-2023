@@ -11,13 +11,25 @@
                    </div>
                <div class="row">
                   <div class="col-lg-6">
-                    <ul *ngFor="let contactMesssage of contactMessageList" class="list-group list-group-horizontal">
-                        <li class="list-group-item">{{contactMesssage.name}}</li>
-                        <li class="list-group-item">{{contactMesssage.email}}</li>
-                        <li class="list-group-item">{{contactMesssage.phnNo}}</li>
-                        <li class="list-group-item">{{contactMesssage.date}}</li>
-                        <li class="list-group-item">{{contactMesssage.messgae}}</li>
-                      </ul>
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr  *ngFor="let contactMesssage of contactMessageList" >
+                            <th scope="row">{{contactMesssage.name}}</th>
+                            <th scope="row">{{contactMesssage.email}}</th>
+                            <th scope="row">{{contactMesssage.message}}</th>
+                            <th scope="row">{{contactMesssage.created_on}}</th>
+                          </tr>
+                         
+                        </tbody>
+                      </table>
                   </div>                
                </div>
                <div class="row">
@@ -29,9 +41,9 @@
                 
                 <div class="col-lg-6">
                 
-                    <input type="text" class="form-control" placeholder="Enter Title"/>                    
-                    <textarea  class="form-control"  placeholder="Message" rows="5" id="comment" name="Message"></textarea>
-                    <div class="btn btn-primary ">Create</div>
+                    <input type="text" class="form-control" [(ngModel)]="form.title" placeholder="Enter Title"/>                    
+                    <textarea  class="form-control"  [(ngModel)]="form.message" placeholder="Message" rows="5" id="comment" name="Message"></textarea>
+                    <div class="btn btn-primary " (click)="postContactMessage()">Create</div>
              
                 </div>
               
@@ -39,13 +51,27 @@
                <div class="row">
                 
                 <div class="col-lg-6">
-                  <ul *ngFor="let contactMesssage of contactMessageList" class="list-group list-group-horizontal">
-                      <li class="list-group-item">{{contactMesssage.name}}</li>
-                      <li class="list-group-item">{{contactMesssage.email}}</li>
-                      <li class="list-group-item">{{contactMesssage.phnNo}}</li>
-                      <li class="list-group-item">{{contactMesssage.date}}</li>
-                      <li class="list-group-item">{{contactMesssage.messgae}}</li>
-                    </ul>
+                    <table class="table table-striped" >
+                        <thead>
+                          <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">description</th>
+                         
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody >
+                          <tr  *ngFor="let businessAction of businessActionList" >
+                             
+                            <th scope="row">{{businessAction.title}}</th>
+                            <th scope="row">{{businessAction.description}}</th>
+                            <th scope="row"><button (click)="deleteBusinessAction(businessAction)" class="btn btn-danger">delete</button></th>
+                          </tr>
+                         
+                        </tbody>
+                      </table>
+
+             
                 </div>
               
              </div>
