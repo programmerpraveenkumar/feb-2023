@@ -1,0 +1,53 @@
+E-commerce app using angular and java Springboot boot Microservices.
+
+Angular & Spring boot:
+1.Download the html css template from the free website.
+2.convert the html css into angular app.
+3.creating the database.
+4.creating the Microservices application.
+5.integrating the angular with microservices app.
+
+
+Database design:
+User->user_id,name,email,password,mobile_no,city,
+      state,street,address,created_date
+Category->category_id,category_name,created_date.
+products->product_id,name,price,category_id,is_available,created_date,discount_percentage,product_description
+addcart->user_id,product_id,qty,created_date
+productReview->product_id,comments,user_id,created_date,rating_star.
+checkout->
+Order->order_id,user_id,product_id,qty,created_date,orderstatus,status message
+wishlist->user_id,product_id,created_date.
+contact_messages->contact_id,email,name,subject,message,created_date
+popular_products->id,product_id,created_date.
+
+
+Spring boot application(micorservices):
+UserApp->
+	login
+	register
+	contactMessages.
+productApp->
+	list the products(recent,popular),
+	list the category, 
+	list the wishlist products by user id, 
+	list the checkout products, 
+	list the completed order products.
+CRON JOB(scheduler):
+1.daily insert the popular product from the order&products.
+2.send the email to user for product suggestion based on user's wishList.
+
+Admin App:
+1.Add & edit the product.
+2.see the all order history.
+3.contact messages 
+4.adding and edit the category.
+5.login for admin
+
+
+
+TBD:
+1.wrong Password attempt while login for the user
+2.steps for forget password.
+3.tracking the delivery for admin and user
+
