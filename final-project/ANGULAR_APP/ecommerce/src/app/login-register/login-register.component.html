@@ -1,0 +1,165 @@
+<app-header></app-header>
+<div class="container">
+    <div id="gototop"> </div>
+    <header id="header">
+    <div class="row">
+        <div class="span4">
+        <h1>
+        <a class="logo" href="index.html"><span>Twitter Bootstrap ecommerce template</span> 
+            <img src="assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
+        </a>
+        </h1>
+        </div>
+        <div class="span4">
+        <div class="offerNoteWrapper">
+        <h1 class="dotmark">
+        <i class="icon-cut"></i>
+        Twitter Bootstrap shopping cart HTML template is available @ $14
+        </h1>
+        </div>
+        </div>
+        <div class="span4 alignR">
+        <p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
+        <span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
+        <span class="btn btn-warning btn-mini">$</span>
+        <span class="btn btn-mini">&pound;</span>
+        <span class="btn btn-mini">&euro;</span>
+        </div>
+    </div>
+    </header>
+    
+    <!--
+    Navigation Bar Section 
+    -->
+    <div class="navbar">
+          <div class="navbar-inner">
+            <div class="container">
+              <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <div class="nav-collapse">
+                <ul class="nav">
+                  <li class="active"><a href="index.html">Home	</a></li>
+                  <li class=""><a href="list-view.html">List View</a></li>
+                  <li class=""><a href="grid-view.html">Grid View</a></li>
+                  <li class=""><a href="three-col.html">Three Column</a></li>
+                  <li class=""><a href="four-col.html">Four Column</a></li>
+                  <li class=""><a href="general.html">General Content</a></li>
+                </ul>
+                <form action="#" class="navbar-search pull-left">
+                  <input type="text" placeholder="Search" class="search-query span2">
+                </form>
+                <ul class="nav pull-right">
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
+                    <div class="dropdown-menu">
+                    <form class="form-horizontal loginFrm">
+                      <div class="control-group">
+                        <input type="text" class="span2" id="inputEmail" placeholder="Email">
+                      </div>
+                      <div class="control-group">
+                        <input type="password" class="span2" id="inputPassword" placeholder="Password">
+                      </div>
+                      <div class="control-group">
+                        <label class="checkbox">
+                        <input type="checkbox"> Remember me
+                        </label>
+                        <button type="submit" class="shopBtn btn-block">Sign in</button>
+                      </div>
+                    </form>
+                    </div>
+                </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    <!-- 
+    Body Section 
+    -->
+        <div class="row">
+    
+
+
+            <app-category-list></app-category-list>
+        <div class="span9">
+            <ul class="breadcrumb">
+                <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+                <li class="active">Login</li>
+            </ul>
+            <h3> Login</h3>	
+            <hr class="soft"/>
+            
+            <div class="row">
+                <div class="span4">
+                    <div class="well">
+                    <h5>CREATE YOUR ACCOUNT</h5><br/>
+                    Enter your e-mail address to create an account.<br/><br/><br/>
+                    <form>
+                      <div class="control-group">
+                        <div class="controls">
+                            <label class="control-label"  >Name</label>
+                            <input class="span3"  type="text" placeholder="name">
+                          </div>
+                          <div class="controls">
+                            <label class="control-label"  >E-mail address</label>
+                            <input class="span3"  type="text" placeholder="Email">
+                          </div>
+                        <div class="controls">
+                            <label class="control-label"  >Mobile</label>
+                          <input class="span3"  type="text" placeholder="Mobile">
+                        </div>
+                        <div class="controls">
+                            <label class="control-label">City</label>
+
+                            <input class="span3"  type="text" placeholder="city">
+                          </div>
+                         
+                          <div class="controls">
+                            <label class="control-label">Address</label>
+
+                            <input class="span3"  type="text" placeholder="address">
+                          </div>
+                      </div>
+                      <div class="controls">
+                      <button type="submit" class="btn block">Create Your Account</button>
+                      </div>
+                    </form>
+                </div>
+                </div>
+                <div class="span1"> &nbsp;</div>
+                <div class="span4">
+                    <div class="well">
+                    <h5>ALREADY REGISTERED ?</h5>
+                    <form>
+                      <div class="control-group">
+                        <label class="control-label" for="inputEmail">Email</label>
+                        <div class="controls">
+                          <input class="span3"  type="text" placeholder="Email">
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="inputPassword">Password</label>
+                        <div class="controls">
+                          <input type="password" class="span3" placeholder="Password">
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <div class="controls">
+                          <button type="submit" class="defaultBtn">Sign in</button> <a href="#">Forget password?</a>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+                </div>
+            </div>	
+        </div>
+
+      
+    </div> <!-- Body wrapper -->
+  
+    
+    <app-footer></app-footer>
+    </div>

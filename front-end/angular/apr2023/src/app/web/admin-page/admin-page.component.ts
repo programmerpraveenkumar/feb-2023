@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { CONSTANTS } from 'src/app/CONSTANTS';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-page',
@@ -13,22 +15,24 @@ export class AdminPageComponent implements OnInit {
   constructor(private httpClient:HttpClient) { }
 
   ngOnInit(): void {
+    let url = environment.url;
+    console.log("env url is ",url);
     this.getContactMessage();
     this.getBusinessActionsList();
   }
-  postContactMessage(){
+  saveBusinessAction(){
     let params = {"title":this.form.title,"description":this.form.message};
-    this.httpClient.post("http://localhost:8080/saveBusinessAction",params).subscribe(res=>{
+    this.httpClient.post(CONSTANTS.API_ENDPOINT+"saveBusinessAction",params).subscribe(res=>{
       this.getBusinessActionsList();//referesh the list.
     })
   }
   getContactMessage(){
-      this.httpClient.get("http://localhost:8080/getAllContactMessages").subscribe(res=>{
+      this.httpClient.get(CONSTANTS.API_ENDPOINT+"getAllContactMessages").subscribe(res=>{
           this.contactMessageList = res;
       })
   }
   getBusinessActionsList(){
-    this.httpClient.get("http://localhost:8080/getBusinessAction").subscribe(res=>{        
+    this.httpClient.get(CONSTANTS.API_ENDPOINT+"getBusinessAction").subscribe(res=>{        
         this.businessActionList = res;
     })
   }
@@ -37,7 +41,7 @@ export class AdminPageComponent implements OnInit {
       return;
     }
     let params = {"id":businessActionObj.id};
-    this.httpClient.post("http://localhost:8080/deleteBusinessAction",params).subscribe(res=>{
+    this.httpClient.post(CONSTANTS.API_ENDPOINT+"deleteBusinessAction",params).subscribe(res=>{
       this.getBusinessActionsList();//referesh the list.
     })
   }

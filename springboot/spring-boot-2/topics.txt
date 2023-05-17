@@ -1,0 +1,10 @@
+Rest APi(http or https)->Android,ios,webapp(angular,react,vue)
+Request should be in json.(JavaScript Object Notation)
+Return the JSON.
+
+SWAGGER->for generating the api endpoints in spring boot server.
+
+1.url,endpoint
+2.method type(get,post,put,patch,delete)
+3.params to send
+
