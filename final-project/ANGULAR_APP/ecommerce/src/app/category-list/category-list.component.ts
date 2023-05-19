@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonService } from '../common.service';
 
 @Component({
   selector: 'app-category-list',
@@ -6,10 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./category-list.component.css']
 })
 export class CategoryListComponent implements OnInit {
-
-  constructor() { }
+  categoryList:any = [{name:""}];
+  @Output() selectedCateory = new EventEmitter();
+  constructor(private common:CommonService) { 
+    this.getCategoryList();
+  }
 
   ngOnInit(): void {
   }
-
+  selectCategory(categoryObj:any){
+    this.selectedCateory.emit(categoryObj.id);
+  }
+  //localhost:8080/category/get
+getCategoryList(){
+  this.common.getHttp("category/get").subscribe(res=>{    
+    this.categoryList = res;
+  })
+}
 }

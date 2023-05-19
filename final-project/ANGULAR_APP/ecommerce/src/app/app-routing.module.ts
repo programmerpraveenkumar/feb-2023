@@ -9,7 +9,8 @@ import { LoginRegisterComponent } from './login-register/login-register.componen
 
 //localhost:4200/product
 const routes: Routes = [
-  {path:'productList',component:ProductListComponent},
+  {path:'',component:ProductListComponent},
+  {path:'productList',component:ProductListComponent},  
   {path:'productDetails',component:ProductDetailsComponent},
   {path:'addcart',component:AddCartComponent},
   {path:'checkout',component:CheckoutComponent},
