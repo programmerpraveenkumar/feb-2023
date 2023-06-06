@@ -9,6 +9,7 @@ import { CommonService } from '../common.service';
 })
 export class CategoryListComponent implements OnInit {
   categoryList:any = [{name:""}];
+  pageName = "category";
   @Output() selectedCateory = new EventEmitter();
   constructor(private common:CommonService) { 
     this.getCategoryList();

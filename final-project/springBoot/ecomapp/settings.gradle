@@ -6,3 +6,6 @@ pluginManagement {
 	}
 }
 rootProject.name = 'ecomapp'
+include 'test'
+include 'sub1'
+

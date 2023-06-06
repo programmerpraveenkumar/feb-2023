@@ -21,6 +21,7 @@ public class OrderModel {
     Integer qty;
     Integer price;
     String status;
+    String address;
     String status_message;
     @Column(updatable = false,insertable = false)
     LocalDate created_date;}

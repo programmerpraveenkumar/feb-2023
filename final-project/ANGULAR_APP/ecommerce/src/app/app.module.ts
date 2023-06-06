@@ -13,6 +13,8 @@ import { OrderHistoryComponent } from './order-history/order-history.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import {HttpClientModule} from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import {HttpClientModule} from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

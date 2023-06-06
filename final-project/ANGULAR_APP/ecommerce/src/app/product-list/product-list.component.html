@@ -134,8 +134,8 @@ New Products
 			<li *ngFor="let product of productDetailList" class="span4">
 			  <div class="thumbnail">
 				 
-				<a class="zoomTool" href="productDetails" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-				<a href="productDetails"><img src="assets/img/b.jpg" alt=""></a>
+				<a class="zoomTool" href="productDetails?product_id={{product.id}}" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+				<a href="productDetails?product_id={{product.id}}"><img src="assets/img/b.jpg" alt=""></a>
 				<div class="caption cntr">
 					<p>{{product.name}}</p>
 					<p><strong> ${{product.price}}</strong></p>

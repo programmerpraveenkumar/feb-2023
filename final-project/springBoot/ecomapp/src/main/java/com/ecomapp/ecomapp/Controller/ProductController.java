@@ -29,6 +29,7 @@ public class ProductController {
         }
 
     }
+
     @GetMapping("getFeaturedProducts")
     public ResponseEntity<?> getFeaturedProducts(){
         return ResponseEntity.ok("");

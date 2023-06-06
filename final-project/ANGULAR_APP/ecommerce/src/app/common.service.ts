@@ -14,7 +14,10 @@ export class CommonService {
     return this.http.get(this.baseURl+endpoint)
   }
   postHttp(endpoint:string,params:any){
-    return this.http.get(this.baseURl+endpoint,params);
+    return this.http.post(this.baseURl+endpoint,params);
+  }
+  getUserId(){
+    return 1;
   }
 }
 export interface productDetails{
