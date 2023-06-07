@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import java.util.List;
@@ -26,8 +26,10 @@ public class AddCartServiceTest {
 
     @InjectMocks
     AddCartService addCartService;
+    @Test
     public void saveAddCartTest()throws Exception{
         AddCartModelDTO addCartModelDTO = TestDataUtil.getAddCartModelDTO();
+
         AddCartModel addCartModel = new AddCartModel();
         addCartModel.setQty(addCartModelDTO.getQty());
         addCartModel.setProduct_id(addCartModelDTO.getProduct_id());

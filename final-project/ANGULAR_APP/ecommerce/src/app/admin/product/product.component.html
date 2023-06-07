@@ -33,7 +33,7 @@ Body Section
 	<div class="span12">
      
 	<div class="well well-small">
-		<h1>Admin Login  </h1>
+		<h1>Admin Product add   </h1>
 	<hr class="soften"/>	
 
 	
@@ -45,15 +45,37 @@ Body Section
                   <td> 
 				<form class="form-inline">
 				   
-				<div><input type="text" class="input-medium" placeholder="username"></div>
-                <div><input type="text" class="input-medium" placeholder="password"></div>
-				<button type="submit" class="shopBtn"> Login</button>
+				<div><input type="text" class="form-control input-large" placeholder="Name"/></div>
+                <div> <select onchange="getProductByCategoryId()" name="" id="">
+                    <!-- category should come from the api response -->
+                    <option value="1">Category 1</option>
+                    <option value="2">Category 2</option>
+                    <option value="3">Category 3</option>
+
+                </select></div>
+                <div><input type="text" class="form-control input-large" placeholder="Price"/></div>
+                <div><textarea type="text" class="form-control input-large" placeholder="desc"></textarea></div>
+				<button type="submit" (click)="addProduct()" class="shopBtn"> Add</button>
 				</form>
 				</td>
                 </tr>
 				
 			</tbody>
 				</table>
+                <!-- list the product list. with category selection. -->
+                <div>
+                    <h1>Product List</h1>
+                    <select onchange="getProductByCategoryId()" name="" id="">
+                        <!-- category should come from the api response -->
+                        <option value="1">Category 1</option>
+                        <option value="2">Category 2</option>
+                        <option value="3">Category 3</option>
+
+                    </select>
+                </div>
+                <div>
+                    <!-- load the product based on the above category selection -->
+                </div>
 				
 	
 

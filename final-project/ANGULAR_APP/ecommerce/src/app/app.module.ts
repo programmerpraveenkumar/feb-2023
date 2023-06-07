@@ -14,6 +14,8 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { CategoryListComponent } from './category-list/category-list.component';
 import {HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AdminModule } from './admin/admin.module';
+
 
 
 @NgModule({
@@ -28,12 +30,16 @@ import { FormsModule } from '@angular/forms';
     OrderHistoryComponent,
     ProductDetailsComponent,
     CategoryListComponent
+  
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AdminModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
